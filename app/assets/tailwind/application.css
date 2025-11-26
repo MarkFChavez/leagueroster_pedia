@@ -1,0 +1,119 @@
+@import "tailwindcss";
+
+@theme {
+  /* Font Family */
+  --font-family-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  /* LoL Official Colors */
+  --color-lol-gold-50: #F5F0E6;
+  --color-lol-gold-100: #EAE0CC;
+  --color-lol-gold-200: #DCC999;
+  --color-lol-gold-300: #CDB166;
+  --color-lol-gold-400: #C4A15B;
+  --color-lol-gold-500: #A88745;
+  --color-lol-gold-600: #8C6D30;
+  --color-lol-gold-700: #6B5323;
+  --color-lol-gold-800: #4A3918;
+  --color-lol-gold-900: #2A200D;
+  --color-lol-gold: #C4A15B;
+
+  --color-lol-blue-50: #E8F1F7;
+  --color-lol-blue-100: #D1E3EF;
+  --color-lol-blue-200: #A3C7DF;
+  --color-lol-blue-300: #75ABCF;
+  --color-lol-blue-400: #548CB4;
+  --color-lol-blue-500: #427099;
+  --color-lol-blue-600: #30547E;
+  --color-lol-blue-700: #1E3863;
+  --color-lol-blue-800: #0C1C48;
+  --color-lol-blue-900: #06102D;
+  --color-lol-blue: #548CB4;
+
+  /* Dark Theme Base - Navy */
+  --color-navy-50: #E8E9F0;
+  --color-navy-100: #D1D3E1;
+  --color-navy-200: #A3A7C3;
+  --color-navy-300: #757BA5;
+  --color-navy-400: #474F87;
+  --color-navy-500: #2A3158;
+  --color-navy-600: #1F2640;
+  --color-navy-700: #15182E;
+  --color-navy-800: #0E1020;
+  --color-navy-900: #0A0E27;
+
+  /* Role Colors */
+  --color-role-top: #E74C3C;
+  --color-role-top-light: #EC7063;
+  --color-role-top-dark: #C0392B;
+
+  --color-role-jungle: #9B59B6;
+  --color-role-jungle-light: #BB8FCE;
+  --color-role-jungle-dark: #7D3C98;
+
+  --color-role-mid: #F39C12;
+  --color-role-mid-light: #F8C471;
+  --color-role-mid-dark: #D68910;
+
+  --color-role-adc: #3498DB;
+  --color-role-adc-light: #5DADE2;
+  --color-role-adc-dark: #2874A6;
+
+  --color-role-support: #2ECC71;
+  --color-role-support-light: #58D68D;
+  --color-role-support-dark: #28B463;
+
+  /* Box Shadows - Glow Effects */
+  --shadow-glow-sm: 0 0 10px rgb(196 161 91 / 0.3);
+  --shadow-glow: 0 0 20px rgb(196 161 91 / 0.4);
+  --shadow-glow-lg: 0 0 30px rgb(196 161 91 / 0.5);
+  --shadow-glow-xl: 0 0 40px rgb(196 161 91 / 0.6);
+
+  /* Animations */
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-fade-in: fadeIn 0.5s ease-in-out;
+  --animate-fade-in-up: fadeInUp 0.6s ease-out;
+  --animate-scale-in: scaleIn 0.3s ease-out;
+  --animate-slide-in-right: slideInRight 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
