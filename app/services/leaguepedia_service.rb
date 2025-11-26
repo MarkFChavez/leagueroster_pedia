@@ -84,9 +84,6 @@ class LeaguepediaService
   def parse_team_page(html, team_name)
     doc = Nokogiri::HTML(html)
 
-    # Extract team name from page title
-    name = doc.at_css('h1.mw-page-title-main')&.text&.strip || team_name
-
     # Find the infobox (usually has class 'infobox' or similar)
     infobox = doc.at_css('.infobox, .portable-infobox')
 
@@ -95,10 +92,23 @@ class LeaguepediaService
       return nil
     end
 
+    # Priority order for extracting full team name:
+    # 1. Check for .infobox-title element (most reliable for full name)
+    full_name = infobox.at_css('.infobox-title')&.text&.strip
+
+    # 2. Look for common infobox fields that contain the full team name
+    full_name ||= extract_infobox_value(infobox, ['Name', 'Full Name', 'Team Name', 'Official Name'])
+
+    # 3. Fall back to page title
+    full_name ||= doc.at_css('h1.mw-page-title-main')&.text&.strip
+
+    # 4. Last resort: use the input team name
+    full_name ||= team_name
+
     # Extract data from infobox rows
     {
-      'Name' => name,
-      'Short' => extract_infobox_value(infobox, ['Short', 'Abbreviation', 'Tag']) || name,
+      'Name' => full_name,
+      'Short' => extract_infobox_value(infobox, ['Short', 'Abbreviation', 'Tag']) || team_name,
       'Region' => extract_infobox_value(infobox, ['Region']),
       'Image' => extract_team_logo(infobox),
       'Website' => extract_infobox_link(infobox, ['Website', 'Web']),

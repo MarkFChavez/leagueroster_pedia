@@ -8,6 +8,6 @@ class TeamsController < ApplicationController
 
   def show
     @team = Team.includes(:players).find(params[:id])
-    @current_players = @team.players.where(is_current: true).order(:role)
+    @current_players = @team.players.where(is_current: true).ordered_by_role
   end
 end

@@ -1,6 +1,5 @@
-<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-  <!-- Back button -->
-  <div class="mb-4 sm:mb-6 animate-[slideInRight_0.5s_ease-out]">
+<!-- Back button -->
+<div class="mb-4 sm:mb-6 animate-[slideInRight_0.5s_ease-out]">
     <%= link_to root_path, class: "inline-flex items-center text-lol-gold hover:text-lol-gold-300 transition-colors duration-200 text-sm sm:text-base" do %>
       <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
@@ -10,22 +9,10 @@
   </div>
 
   <!-- Team Header -->
-  <div class="bg-navy-700 rounded-lg border border-navy-600 shadow-glow-sm p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8 animate-[fadeInUp_0.6s_ease-out]">
-    <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
-      <% if @team.logo_url.present? %>
-        <div class="flex-shrink-0 w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 bg-navy-800 rounded-lg flex items-center justify-center overflow-hidden border-2 border-navy-600 animate-[scaleIn_0.3s_ease-out]" style="animation-delay: 0.2s; animation-fill-mode: backwards;">
-          <img src="https://lol.fandom.com/wiki/Special:Redirect/file/<%= @team.logo_url %>"
-               alt="<%= @team.name %>"
-               class="w-full h-full object-contain"
-               loading="eager"
-               onerror="this.parentElement.innerHTML='<div class=\'text-5xl sm:text-6xl\'>🏆</div>'">
-        </div>
-      <% else %>
-        <div class="flex-shrink-0 w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 bg-navy-800 rounded-lg flex items-center justify-center text-5xl sm:text-6xl border-2 border-navy-600 animate-[scaleIn_0.3s_ease-out]" style="animation-delay: 0.2s; animation-fill-mode: backwards;">
-          🏆
-        </div>
-      <% end %>
-
+  <div class="relative bg-gradient-to-br from-navy-700 via-navy-800 to-navy-700 rounded-lg border-2 border-lol-gold/50 shadow-[0_0_30px_rgba(196,161,91,0.4),0_10px_40px_rgba(0,0,0,0.5)] p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8 animate-[fadeInUp_0.6s_ease-out] overflow-hidden">
+    <!-- Gradient overlay -->
+    <div class="absolute inset-0 bg-gradient-to-br from-lol-gold/5 to-transparent opacity-50"></div>
+    <div class="relative flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 z-10">
       <div class="flex-1 text-center sm:text-left">
         <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-3"><%= @team.name %></h1>
         <div class="flex flex-wrap justify-center sm:justify-start gap-3 sm:gap-4 text-gray-300">
@@ -88,27 +75,9 @@
           </thead>
           <tbody class="divide-y divide-navy-600">
             <% @current_players.each_with_index do |player, index| %>
-              <%
-                role_class = case player.role&.downcase
-                when 'top', 'top laner', 'toplane'
-                  'bg-role-top/90 text-white border-role-top'
-                when 'jungle', 'jungler'
-                  'bg-role-jungle/90 text-white border-role-jungle'
-                when 'mid', 'mid laner', 'midlane', 'middle'
-                  'bg-role-mid/90 text-white border-role-mid'
-                when 'adc', 'ad carry', 'bot', 'bottom', 'bot laner'
-                  'bg-role-adc/90 text-white border-role-adc'
-                when 'support', 'sup'
-                  'bg-role-support/90 text-white border-role-support'
-                else
-                  'bg-navy-600 text-gray-300 border-navy-500'
-                end
-              %>
               <tr class="hover:bg-navy-600 transition-colors duration-150 opacity-0 animate-[fadeInUp_0.4s_ease-out]" style="animation-delay: <%= 0.3 + (index * 0.1) %>s; animation-fill-mode: forwards;">
-                <td class="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
-                  <span class="inline-flex items-center px-2 sm:px-3 py-1 rounded-md text-xs font-bold uppercase border <%= role_class %>">
-                    <%= player.role || 'N/A' %>
-                  </span>
+                <td class="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap text-sm text-gray-300">
+                  <%= player.role || 'N/A' %>
                 </td>
                 <td class="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
                   <div class="text-sm sm:text-base font-bold text-white"><%= player.ign %></div>
@@ -142,8 +111,7 @@
       </div>
 
       <div class="mt-4 sm:mt-6 text-xs sm:text-sm text-gray-400 text-center sm:text-left">
-        <p><strong class="text-lol-gold"><%= pluralize(@current_players.count, 'player') %></strong> in current roster</p>
+        <p><strong class="text-lol-gold"><%= pluralize(@current_players.count, 'member') %></strong> in current roster</p>
       </div>
     <% end %>
   </div>
-</div>
