@@ -1,15 +1,15 @@
 module TeamLogoHelper
   # Region color schemes for visual distinction
   REGION_COLORS = {
-    'LCK' => { primary: '#E74C3C', secondary: '#C0392B', glow: 'rgba(231, 76, 60, 0.6)' },     # Red - Korea
-    'LPL' => { primary: '#F39C12', secondary: '#D68910', glow: 'rgba(243, 156, 18, 0.6)' },    # Orange - China
-    'LEC' => { primary: '#3498DB', secondary: '#2874A6', glow: 'rgba(52, 152, 219, 0.6)' },    # Blue - Europe
-    'LCS' => { primary: '#9B59B6', secondary: '#7D3C98', glow: 'rgba(155, 89, 182, 0.6)' },    # Purple - NA
-    'PCS' => { primary: '#2ECC71', secondary: '#28B463', glow: 'rgba(46, 204, 113, 0.6)' },    # Green - Pacific
-    'VCS' => { primary: '#E67E22', secondary: '#CA6F1E', glow: 'rgba(230, 126, 34, 0.6)' },    # Dark Orange - Vietnam
-    'CBLOL' => { primary: '#1ABC9C', secondary: '#16A085', glow: 'rgba(26, 188, 156, 0.6)' },  # Teal - Brazil
-    'LJL' => { primary: '#E91E63', secondary: '#C2185B', glow: 'rgba(233, 30, 99, 0.6)' },     # Pink - Japan
-    'LLA' => { primary: '#FF5722', secondary: '#E64A19', glow: 'rgba(255, 87, 34, 0.6)' },     # Deep Orange - Latin America
+    'KR' => { primary: '#E74C3C', secondary: '#C0392B', glow: 'rgba(231, 76, 60, 0.6)' },        # Red - Korea
+    'CN' => { primary: '#F39C12', secondary: '#D68910', glow: 'rgba(243, 156, 18, 0.6)' },       # Orange - China
+    'EMEA' => { primary: '#3498DB', secondary: '#2874A6', glow: 'rgba(52, 152, 219, 0.6)' },     # Blue - Europe/Middle East/Africa
+    'NA' => { primary: '#9B59B6', secondary: '#7D3C98', glow: 'rgba(155, 89, 182, 0.6)' },       # Purple - North America
+    'PCS' => { primary: '#2ECC71', secondary: '#28B463', glow: 'rgba(46, 204, 113, 0.6)' },      # Green - Pacific
+    'VCS' => { primary: '#E67E22', secondary: '#CA6F1E', glow: 'rgba(230, 126, 34, 0.6)' },      # Dark Orange - Vietnam
+    'CBLOL' => { primary: '#1ABC9C', secondary: '#16A085', glow: 'rgba(26, 188, 156, 0.6)' },    # Teal - Brazil
+    'LJL' => { primary: '#E91E63', secondary: '#C2185B', glow: 'rgba(233, 30, 99, 0.6)' },       # Pink - Japan
+    'LLA' => { primary: '#FF5722', secondary: '#E64A19', glow: 'rgba(255, 87, 34, 0.6)' },       # Deep Orange - Latin America
   }.freeze
 
   # Fallback gold color for unknown regions

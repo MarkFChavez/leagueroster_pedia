@@ -1,9 +1,8 @@
 class TeamsController < ApplicationController
   def index
-    @teams_by_region = Team.where(is_disbanded: [false, nil])
-                           .includes(:players)
-                           .order(:region, :name)
-                           .group_by(&:region)
+    @teams = Team.where(is_disbanded: [false, nil])
+                 .includes(:players)
+                 .order(:region, :name)
   end
 
   def show

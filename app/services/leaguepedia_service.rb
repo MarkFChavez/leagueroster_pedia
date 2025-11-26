@@ -229,25 +229,38 @@ class LeaguepediaService
       row = infobox.at_css("tr:has(th:contains('#{label}'))")
       if row
         value = row.at_css('td')&.text&.strip
-        return value if value.present?
+        return deduplicate_text(value) if value.present?
       end
 
       # Format 2: <div data-source="label"><div class="pi-data-value">Value</div></div>
       data_item = infobox.at_css("[data-source*='#{label.downcase.gsub(' ', '')}']")
       if data_item
         value = data_item.at_css('.pi-data-value, .pi-font')&.text&.strip
-        return value if value.present?
+        return deduplicate_text(value) if value.present?
       end
 
       # Format 3: <div class="infobox-label">Label</div><div class="infobox-data">Value</div>
       label_div = infobox.css('.infobox-label, .pi-data-label').find { |el| el.text.strip.match?(/#{label}/i) }
       if label_div
         value = label_div.next_element&.text&.strip
-        return value if value.present?
+        return deduplicate_text(value) if value.present?
       end
     end
 
     nil
+  end
+
+  # Deduplicate text that may have been concatenated from nested HTML elements
+  # e.g., "EMEAEMEA" -> "EMEA", "KRKorea" -> "KR"
+  def deduplicate_text(text)
+    return text unless text.present? && text.length.even?
+
+    half = text.length / 2
+    first_half = text[0...half]
+    second_half = text[half..-1]
+
+    # If first half equals second half, it's duplicated
+    first_half == second_half ? first_half : text
   end
 
   # Extract team logo URL from infobox
