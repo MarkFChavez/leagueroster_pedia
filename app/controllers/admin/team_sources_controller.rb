@@ -15,6 +15,8 @@ module Admin
         )
       end
 
+      @team_sources = @team_sources.page(params[:page])
+
       add_breadcrumb "Team Sources"
     end
 

@@ -21,6 +21,8 @@ gem "jbuilder"
 # Simple HTTP and REST client [https://github.com/jnunemaker/httparty]
 gem "httparty"
 
+gem "kaminari"
+
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
 
