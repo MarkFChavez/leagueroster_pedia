@@ -1,0 +1,11 @@
+development:
+  base_url: 'https://lol.fandom.com'
+  rate_limit_delay: 2.5
+
+test:
+  base_url: 'https://lol.fandom.com'
+  rate_limit_delay: 0.1
+
+production:
+  base_url: 'https://lol.fandom.com'
+  rate_limit_delay: 2.5
