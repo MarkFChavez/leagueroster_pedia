@@ -1,0 +1,18 @@
+<div class="animate-[fadeIn_0.8s_ease-out]">
+  <!-- Header Section -->
+  <div class="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6 mb-6">
+    <h2 class="text-3xl font-bold">
+      <span class="bg-gradient-to-r from-purple-400 to-purple-300 bg-clip-text text-transparent">
+        Edit Player
+      </span>
+    </h2>
+    <p class="text-gray-400 mt-2">
+      Update <%= @player.ign %> details
+    </p>
+  </div>
+
+  <!-- Form Section -->
+  <div class="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
+    <%= render "form", player: @player %>
+  </div>
+</div>
