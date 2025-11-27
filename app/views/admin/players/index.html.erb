@@ -1,69 +1,67 @@
-<div class="animate-[fadeIn_0.8s_ease-out]">
+<div>
   <!-- Header Section -->
-  <div class="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6 mb-6">
-    <h2 class="text-3xl font-bold mb-2">
-      <span class="bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">
-        Players
-      </span>
+  <div class="bg-white shadow-sm border border-gray-200 rounded-lg p-6 mb-6">
+    <h2 class="text-3xl font-bold mb-2 text-gray-900">
+      Players
     </h2>
-    <p class="text-gray-400">
+    <p class="text-gray-600">
       View player records synced from Team Sources
     </p>
   </div>
 
   <!-- Search Section -->
-  <div class="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-lg p-4 mb-6">
+  <div class="bg-white shadow-sm border border-gray-200 rounded-lg p-4 mb-6">
     <%= form_with url: admin_players_path, method: :get, class: "flex gap-3" do |f| %>
       <div class="flex-1">
         <%= f.text_field :q,
             value: params[:q],
             placeholder: "Search by player, role, or team...",
-            class: "w-full bg-gray-900/50 border border-gray-700 rounded-lg px-4 py-2 text-gray-300 placeholder-gray-500 focus:outline-none focus:border-blue-700" %>
+            class: "w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200" %>
       </div>
-      <%= f.submit "Search", class: "bg-blue-800 hover:bg-blue-900 text-white font-semibold px-6 rounded-lg transition-colors cursor-pointer" %>
+      <%= f.submit "Search", class: "bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-6 rounded-lg transition-colors cursor-pointer" %>
       <% if params[:q].present? %>
-        <%= link_to "Clear", admin_players_path, class: "bg-gray-700 hover:bg-gray-600 text-white font-semibold px-6 rounded-lg transition-colors flex items-center" %>
+        <%= link_to "Clear", admin_players_path, class: "bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-6 rounded-lg transition-colors flex items-center" %>
       <% end %>
     <% end %>
     <% if params[:q].present? %>
-      <div class="text-gray-400 text-sm mt-2">
+      <div class="text-gray-600 text-sm mt-2">
         Found <%= @players.count %> result(s) for "<%= params[:q] %>"
       </div>
     <% end %>
   </div>
 
   <!-- Table Section -->
-  <div class="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-lg overflow-hidden">
+  <div class="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden">
     <table class="w-full">
-      <thead class="bg-gray-800/50 border-b border-gray-700/50">
+      <thead class="bg-gray-50 border-b border-gray-200">
         <tr>
-          <th class="px-6 py-4 text-left text-xs font-semibold text-blue-400 uppercase tracking-wider">IGN</th>
-          <th class="px-6 py-4 text-left text-xs font-semibold text-blue-400 uppercase tracking-wider">Name</th>
-          <th class="px-6 py-4 text-left text-xs font-semibold text-blue-400 uppercase tracking-wider">Team</th>
-          <th class="px-6 py-4 text-left text-xs font-semibold text-blue-400 uppercase tracking-wider">Role</th>
-          <th class="px-6 py-4 text-left text-xs font-semibold text-blue-400 uppercase tracking-wider">Contract Ends</th>
-          <th class="px-6 py-4 text-left text-xs font-semibold text-blue-400 uppercase tracking-wider">Date Joined</th>
-          <th class="px-6 py-4 text-left text-xs font-semibold text-blue-400 uppercase tracking-wider">Actions</th>
+          <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">IGN</th>
+          <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Name</th>
+          <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Team</th>
+          <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Role</th>
+          <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Contract Ends</th>
+          <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Date Joined</th>
+          <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Actions</th>
         </tr>
       </thead>
-      <tbody class="divide-y divide-gray-700/50">
+      <tbody class="divide-y divide-gray-200">
         <% if @players.any? %>
           <% @players.each do |player| %>
-            <tr class="hover:bg-gray-800/30 transition-colors">
-              <td class="px-6 py-4 text-gray-300 font-semibold"><%= player.ign %></td>
-              <td class="px-6 py-4 text-gray-300"><%= player.name.present? ? player.name : content_tag(:span, "-", class: "text-gray-600") %></td>
-              <td class="px-6 py-4 text-gray-400 text-sm">
-                <%= link_to player.team.team_source.short_name, admin_team_path(player.team), class: "text-blue-400 hover:text-blue-300" %>
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-6 py-4 text-gray-900 font-semibold"><%= player.ign %></td>
+              <td class="px-6 py-4 text-gray-900"><%= player.name.present? ? player.name : content_tag(:span, "-", class: "text-gray-400") %></td>
+              <td class="px-6 py-4 text-gray-600 text-sm">
+                <%= link_to player.team.team_source.short_name, admin_team_path(player.team), class: "text-yellow-600 hover:text-yellow-700" %>
               </td>
-              <td class="px-6 py-4 text-gray-300"><%= player.role.present? ? player.role : content_tag(:span, "-", class: "text-gray-600") %></td>
-              <td class="px-6 py-4 text-gray-400 text-sm">
-                <%= player.contract_ends.present? ? player.contract_ends.strftime("%b %d, %Y") : content_tag(:span, "-", class: "text-gray-600") %>
+              <td class="px-6 py-4 text-gray-900"><%= player.role.present? ? player.role : content_tag(:span, "-", class: "text-gray-400") %></td>
+              <td class="px-6 py-4 text-gray-600 text-sm">
+                <%= player.contract_ends.present? ? player.contract_ends.strftime("%b %d, %Y") : content_tag(:span, "-", class: "text-gray-400") %>
               </td>
-              <td class="px-6 py-4 text-gray-400 text-sm">
-                <%= player.date_joined.present? ? player.date_joined.strftime("%b %d, %Y") : content_tag(:span, "-", class: "text-gray-600") %>
+              <td class="px-6 py-4 text-gray-600 text-sm">
+                <%= player.date_joined.present? ? player.date_joined.strftime("%b %d, %Y") : content_tag(:span, "-", class: "text-gray-400") %>
               </td>
               <td class="px-6 py-4">
-                <%= link_to "View", admin_player_path(player), class: "text-blue-400 hover:text-blue-300 font-medium" %>
+                <%= link_to "View", admin_player_path(player), class: "text-yellow-600 hover:text-yellow-700 font-medium" %>
               </td>
             </tr>
           <% end %>

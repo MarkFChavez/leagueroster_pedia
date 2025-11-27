@@ -1,76 +1,74 @@
-<div class="animate-[fadeIn_0.8s_ease-out]">
+<div>
   <!-- Header Section -->
-  <div class="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6 mb-6">
-    <h2 class="text-3xl font-bold">
-      <span class="bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">
-        <%= @player.ign %>
-      </span>
+  <div class="bg-white shadow-sm border border-gray-200 rounded-lg p-6 mb-6">
+    <h2 class="text-3xl font-bold text-gray-900">
+      <%= @player.ign %>
     </h2>
   </div>
 
   <!-- Details Section -->
-  <div class="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6 mb-6">
+  <div class="bg-white shadow-sm border border-gray-200 rounded-lg p-6 mb-6">
     <div class="space-y-4">
       <div>
-        <label class="block text-sm font-semibold text-blue-400 mb-1">IGN (In-Game Name)</label>
-        <p class="text-gray-300 text-lg"><%= @player.ign %></p>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">IGN (In-Game Name)</label>
+        <p class="text-gray-900 text-lg"><%= @player.ign %></p>
       </div>
 
       <div>
-        <label class="block text-sm font-semibold text-blue-400 mb-1">Full Name</label>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Full Name</label>
         <% if @player.name.present? %>
-          <p class="text-gray-300 text-lg"><%= @player.name %></p>
+          <p class="text-gray-900 text-lg"><%= @player.name %></p>
         <% else %>
-          <p class="text-gray-600 text-lg">Not set</p>
+          <p class="text-gray-400 text-lg">Not set</p>
         <% end %>
       </div>
 
       <div>
-        <label class="block text-sm font-semibold text-blue-400 mb-1">Team</label>
-        <%= link_to @player.team.team_source.short_name, admin_team_path(@player.team), class: "text-blue-400 hover:text-blue-300 underline text-lg" %>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Team</label>
+        <%= link_to @player.team.team_source.short_name, admin_team_path(@player.team), class: "text-yellow-600 hover:text-yellow-700 underline text-lg" %>
       </div>
 
       <div>
-        <label class="block text-sm font-semibold text-blue-400 mb-1">Role</label>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Role</label>
         <% if @player.role.present? %>
-          <p class="text-gray-300 text-lg"><%= @player.role %></p>
+          <p class="text-gray-900 text-lg"><%= @player.role %></p>
         <% else %>
-          <p class="text-gray-600 text-lg">Not set</p>
+          <p class="text-gray-400 text-lg">Not set</p>
         <% end %>
       </div>
 
       <div>
-        <label class="block text-sm font-semibold text-blue-400 mb-1">Contract Ends</label>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Contract Ends</label>
         <% if @player.contract_ends.present? %>
-          <p class="text-gray-300 text-lg"><%= @player.contract_ends.strftime("%B %d, %Y") %></p>
+          <p class="text-gray-900 text-lg"><%= @player.contract_ends.strftime("%B %d, %Y") %></p>
         <% else %>
-          <p class="text-gray-600 text-lg">Not set</p>
+          <p class="text-gray-400 text-lg">Not set</p>
         <% end %>
       </div>
 
       <div>
-        <label class="block text-sm font-semibold text-blue-400 mb-1">Date Joined</label>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Date Joined</label>
         <% if @player.date_joined.present? %>
-          <p class="text-gray-300 text-lg"><%= @player.date_joined.strftime("%B %d, %Y") %></p>
+          <p class="text-gray-900 text-lg"><%= @player.date_joined.strftime("%B %d, %Y") %></p>
         <% else %>
-          <p class="text-gray-600 text-lg">Not set</p>
+          <p class="text-gray-400 text-lg">Not set</p>
         <% end %>
       </div>
 
       <div>
-        <label class="block text-sm font-semibold text-blue-400 mb-1">Created At</label>
-        <p class="text-gray-300"><%= @player.created_at.strftime("%B %d, %Y at %I:%M %p") %></p>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Created At</label>
+        <p class="text-gray-900"><%= @player.created_at.strftime("%B %d, %Y at %I:%M %p") %></p>
       </div>
 
       <div>
-        <label class="block text-sm font-semibold text-blue-400 mb-1">Updated At</label>
-        <p class="text-gray-300"><%= @player.updated_at.strftime("%B %d, %Y at %I:%M %p") %></p>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Updated At</label>
+        <p class="text-gray-900"><%= @player.updated_at.strftime("%B %d, %Y at %I:%M %p") %></p>
       </div>
     </div>
   </div>
 
   <!-- Back Link -->
   <div>
-    <%= link_to "← Back to Players", admin_players_path, class: "text-blue-400 hover:text-blue-300 font-medium" %>
+    <%= link_to "← Back to Players", admin_players_path, class: "text-yellow-600 hover:text-yellow-700 font-medium" %>
   </div>
 </div>

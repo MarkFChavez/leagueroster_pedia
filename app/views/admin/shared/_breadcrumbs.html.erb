@@ -1,19 +1,19 @@
 <% if breadcrumbs.any? %>
-  <nav class="mb-6 animate-[fadeIn_0.6s_ease-out]">
-    <div class="bg-gray-800/20 backdrop-blur-sm border border-gray-700/30 rounded-lg px-4 py-2">
+  <nav class="mb-6">
+    <div class="bg-white shadow-sm border border-gray-200 rounded-lg px-4 py-3">
       <ol class="flex items-center space-x-2 text-sm">
         <% breadcrumbs.each_with_index do |crumb, index| %>
           <li class="flex items-center">
             <% if index > 0 %>
-              <svg class="w-4 h-4 text-gray-600 mx-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-4 h-4 text-gray-400 mx-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
               </svg>
             <% end %>
 
             <% if crumb[:path].present? %>
-              <%= link_to crumb[:name], crumb[:path], class: "text-blue-400 hover:text-blue-300 transition-colors font-medium" %>
+              <%= link_to crumb[:name], crumb[:path], class: "text-yellow-600 hover:text-yellow-700 transition-colors font-medium" %>
             <% else %>
-              <span class="text-gray-400 font-medium"><%= crumb[:name] %></span>
+              <span class="text-gray-600 font-medium"><%= crumb[:name] %></span>
             <% end %>
           </li>
         <% end %>

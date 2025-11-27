@@ -1,79 +1,77 @@
-<div class="animate-[fadeIn_0.8s_ease-out]">
+<div>
   <!-- Header Section -->
-  <div class="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6 mb-6">
+  <div class="bg-white shadow-sm border border-gray-200 rounded-lg p-6 mb-6">
     <div class="flex justify-between items-center">
       <div>
-        <h2 class="text-3xl font-bold mb-2">
-          <span class="bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">
-            Team Sources
-          </span>
+        <h2 class="text-3xl font-bold mb-2 text-gray-900">
+          Team Sources
         </h2>
-        <p class="text-gray-400">
+        <p class="text-gray-600">
           Manage external team data sources
         </p>
       </div>
-      <%= link_to "New Team Source", new_admin_team_source_path, class: "bg-blue-800 hover:bg-blue-900 text-white font-semibold py-3 px-6 rounded-lg transition-colors" %>
+      <%= link_to "New Team Source", new_admin_team_source_path, class: "bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors" %>
     </div>
   </div>
 
   <!-- Search Section -->
-  <div class="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-lg p-4 mb-6">
+  <div class="bg-white shadow-sm border border-gray-200 rounded-lg p-4 mb-6">
     <%= form_with url: admin_team_sources_path, method: :get, class: "flex gap-3" do |f| %>
       <div class="flex-1">
         <%= f.text_field :q,
             value: params[:q],
             placeholder: "Search by name or URL...",
-            class: "w-full bg-gray-900/50 border border-gray-700 rounded-lg px-4 py-2 text-gray-300 placeholder-gray-500 focus:outline-none focus:border-blue-700" %>
+            class: "w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200" %>
       </div>
-      <%= f.submit "Search", class: "bg-blue-800 hover:bg-blue-900 text-white font-semibold px-6 rounded-lg transition-colors cursor-pointer" %>
+      <%= f.submit "Search", class: "bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-6 rounded-lg transition-colors cursor-pointer" %>
       <% if params[:q].present? %>
-        <%= link_to "Clear", admin_team_sources_path, class: "bg-gray-700 hover:bg-gray-600 text-white font-semibold px-6 rounded-lg transition-colors flex items-center" %>
+        <%= link_to "Clear", admin_team_sources_path, class: "bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-6 rounded-lg transition-colors flex items-center" %>
       <% end %>
     <% end %>
     <% if params[:q].present? %>
-      <div class="text-gray-400 text-sm mt-2">
+      <div class="text-gray-600 text-sm mt-2">
         Found <%= @team_sources.count %> result(s) for "<%= params[:q] %>"
       </div>
     <% end %>
   </div>
 
   <!-- Table Section -->
-  <div class="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-lg overflow-hidden">
+  <div class="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden">
     <table class="w-full">
-      <thead class="bg-gray-800/50 border-b border-gray-700/50">
+      <thead class="bg-gray-50 border-b border-gray-200">
         <tr>
-          <th class="px-6 py-4 text-left text-xs font-semibold text-blue-400 uppercase tracking-wider">Short Name</th>
-          <th class="px-6 py-4 text-left text-xs font-semibold text-blue-400 uppercase tracking-wider">Long Name</th>
-          <th class="px-6 py-4 text-left text-xs font-semibold text-blue-400 uppercase tracking-wider">External URL</th>
-          <th class="px-6 py-4 text-left text-xs font-semibold text-blue-400 uppercase tracking-wider">Last Synced</th>
-          <th class="px-6 py-4 text-left text-xs font-semibold text-blue-400 uppercase tracking-wider">Actions</th>
+          <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Short Name</th>
+          <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Long Name</th>
+          <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">External URL</th>
+          <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Last Synced</th>
+          <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Actions</th>
         </tr>
       </thead>
-      <tbody class="divide-y divide-gray-700/50">
+      <tbody class="divide-y divide-gray-200">
         <% if @team_sources.any? %>
           <% @team_sources.each do |team_source| %>
-            <tr class="hover:bg-gray-800/30 transition-colors">
-              <td class="px-6 py-4 text-gray-300"><%= team_source.short_name %></td>
-              <td class="px-6 py-4 text-gray-300"><%= team_source.long_name %></td>
-              <td class="px-6 py-4 text-gray-400 text-sm">
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-6 py-4 text-gray-900 font-medium"><%= team_source.short_name %></td>
+              <td class="px-6 py-4 text-gray-900"><%= team_source.long_name %></td>
+              <td class="px-6 py-4 text-gray-600 text-sm">
                 <% if team_source.external_team_url.present? %>
-                  <%= link_to team_source.external_team_url, team_source.external_team_url, target: "_blank", class: "text-blue-400 hover:text-blue-300 underline" %>
+                  <%= link_to team_source.external_team_url, team_source.external_team_url, target: "_blank", class: "text-yellow-600 hover:text-yellow-700 underline" %>
                 <% else %>
-                  <span class="text-gray-600">-</span>
+                  <span class="text-gray-400">-</span>
                 <% end %>
               </td>
-              <td class="px-6 py-4 text-gray-400 text-sm">
+              <td class="px-6 py-4 text-gray-600 text-sm">
                 <% if team_source.last_synced_at.present? %>
                   <%= time_ago_in_words(team_source.last_synced_at) %> ago
                 <% else %>
-                  <span class="text-gray-600">Never</span>
+                  <span class="text-gray-400">Never</span>
                 <% end %>
               </td>
               <td class="px-6 py-4">
                 <div class="flex gap-2">
-                  <%= link_to "View", admin_team_source_path(team_source), class: "text-blue-400 hover:text-blue-300 font-medium" %>
-                  <%= link_to "Edit", edit_admin_team_source_path(team_source), class: "text-blue-400 hover:text-blue-300 font-medium" %>
-                  <%= button_to "Delete", admin_team_source_path(team_source), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "text-red-400 hover:text-red-300 font-medium" %>
+                  <%= link_to "View", admin_team_source_path(team_source), class: "text-yellow-600 hover:text-yellow-700 font-medium" %>
+                  <%= link_to "Edit", edit_admin_team_source_path(team_source), class: "text-yellow-600 hover:text-yellow-700 font-medium" %>
+                  <%= button_to "Delete", admin_team_source_path(team_source), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "text-red-600 hover:text-red-700 font-medium" %>
                 </div>
               </td>
             </tr>
@@ -82,7 +80,7 @@
           <tr>
             <td colspan="5" class="px-6 py-12 text-center text-gray-500">
               <p class="text-lg mb-4">No team sources found</p>
-              <%= link_to "Create your first team source", new_admin_team_source_path, class: "text-blue-400 hover:text-blue-300 underline" %>
+              <%= link_to "Create your first team source", new_admin_team_source_path, class: "text-yellow-600 hover:text-yellow-700 underline" %>
             </td>
           </tr>
         <% end %>
