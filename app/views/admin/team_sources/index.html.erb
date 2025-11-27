@@ -16,6 +16,27 @@
     </div>
   </div>
 
+  <!-- Search Section -->
+  <div class="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-lg p-4 mb-6">
+    <%= form_with url: admin_team_sources_path, method: :get, class: "flex gap-3" do |f| %>
+      <div class="flex-1">
+        <%= f.text_field :q,
+            value: params[:q],
+            placeholder: "Search by name or URL...",
+            class: "w-full bg-gray-900/50 border border-gray-700 rounded-lg px-4 py-2 text-gray-300 placeholder-gray-500 focus:outline-none focus:border-blue-700" %>
+      </div>
+      <%= f.submit "Search", class: "bg-blue-800 hover:bg-blue-900 text-white font-semibold px-6 rounded-lg transition-colors cursor-pointer" %>
+      <% if params[:q].present? %>
+        <%= link_to "Clear", admin_team_sources_path, class: "bg-gray-700 hover:bg-gray-600 text-white font-semibold px-6 rounded-lg transition-colors flex items-center" %>
+      <% end %>
+    <% end %>
+    <% if params[:q].present? %>
+      <div class="text-gray-400 text-sm mt-2">
+        Found <%= @team_sources.count %> result(s) for "<%= params[:q] %>"
+      </div>
+    <% end %>
+  </div>
+
   <!-- Table Section -->
   <div class="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-lg overflow-hidden">
     <table class="w-full">
@@ -51,7 +72,6 @@
               <td class="px-6 py-4">
                 <div class="flex gap-2">
                   <%= link_to "View", admin_team_source_path(team_source), class: "text-blue-400 hover:text-blue-300 font-medium" %>
-                  <%= button_to "Sync", sync_admin_team_source_path(team_source), method: :post, data: { turbo_confirm: "Sync #{team_source.short_name}?" }, class: "text-blue-400 hover:text-blue-300 font-medium" %>
                   <%= link_to "Edit", edit_admin_team_source_path(team_source), class: "text-blue-400 hover:text-blue-300 font-medium" %>
                   <%= button_to "Delete", admin_team_source_path(team_source), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "text-red-400 hover:text-red-300 font-medium" %>
                 </div>

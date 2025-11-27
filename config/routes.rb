@@ -12,6 +12,9 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "pages#index"
 
+  # Public team pages
+  resources :teams, only: [:show]
+
   # Admin routes
   namespace :admin do
     root "dashboard#index"
@@ -20,7 +23,7 @@ Rails.application.routes.draw do
         post :sync
       end
     end
-    resources :teams
-    resources :players
+    resources :teams, only: [:index, :show]
+    resources :players, only: [:index, :show]
   end
 end
