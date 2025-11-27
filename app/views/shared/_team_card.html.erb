@@ -5,12 +5,28 @@
   roster_json = team.players.map { |p| { ign: p.ign, name: p.name, role: p.role, contract_ends: p.contract_ends, date_joined: p.date_joined } }.to_json
   # Get team logo configuration (region-based)
   logo_config = team_logo_config(team)
+  region_colors = region_color_config(team.region)
+
+  # Mode-specific styling
+  card_classes = case mode
+  when 'editorial'
+    'w-full p-6 rounded-xl hover:scale-[1.02]'
+  when 'masonry'
+    'w-full p-4 rounded-lg'
+  when 'compact'
+    'w-48 p-4 rounded-lg'
+  else
+    'w-full p-4 rounded-lg'
+  end
+
+  logo_size = mode == 'editorial' ? 'w-20 h-20' : 'w-16 h-16'
+  logo_text_size = mode == 'editorial' ? 'text-2xl' : 'text-xl'
+  title_size = mode == 'editorial' ? 'text-xl' : (mode == 'compact' ? 'text-base' : 'text-lg')
 %>
 
-<div class="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-lg p-4
+<div class="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 <%= card_classes %>
             hover:border-lol-gold/50 hover:shadow-glow-sm transition-all duration-300
-            group flex-shrink-0 <%= mode == 'masonry' ? 'w-full' : (mode == 'compact' ? 'w-48' : 'w-full') %>
-            flex flex-col cursor-pointer js-open-modal"
+            group flex-shrink-0 flex flex-col cursor-pointer js-open-modal"
      data-team-id="<%= team.id %>"
      data-team-name="<%= team.team_source.short_name %>"
      data-team-long-name="<%= team.team_source.long_name %>"
@@ -18,17 +34,17 @@
      data-team-roster="<%= roster_json %>">
 
   <!-- Team Logo Circle -->
-  <div class="w-16 h-16 mx-auto mb-3 bg-gradient-to-br <%= logo_config[:gradient_from] %> <%= logo_config[:gradient_to] %>
+  <div class="<%= logo_size %> mx-auto mb-4 bg-gradient-to-br <%= logo_config[:gradient_from] %> <%= logo_config[:gradient_to] %>
               flex items-center justify-center shadow-glow-sm border <%= logo_config[:border_color] %>
               <%= logo_config[:hover_shadow] %> <%= logo_config[:hover_border] %> transition-all duration-300
               rounded-full">
-    <span class="text-xl font-black <%= logo_config[:text_color] %>">
+    <span class="<%= logo_text_size %> font-black <%= logo_config[:text_color] %>">
       <%= team.team_source.short_name %>
     </span>
   </div>
 
   <!-- Team Name -->
-  <h3 class="text-center mb-3 <%= mode == 'compact' ? 'text-base' : 'text-lg' %> font-bold">
+  <h3 class="text-center mb-3 <%= title_size %> font-bold">
     <span class="bg-gradient-to-r from-lol-gold via-lol-gold-300 to-lol-gold
                  bg-clip-text text-transparent group-hover:from-lol-gold-300
                  group-hover:via-lol-gold group-hover:to-lol-gold-300 transition-all duration-300">
@@ -39,16 +55,16 @@
   <% if mode != 'minimal' %>
     <!-- Region Badge -->
     <div class="flex justify-center mb-3">
-      <span class="inline-flex items-center px-2 py-1 rounded-full bg-lol-blue/20
-                   border border-lol-blue/50 text-lol-blue-300 text-xs font-semibold">
+      <span class="inline-flex items-center px-3 py-1.5 rounded-full <%= region_colors[:badge_bg] %>
+                   border <%= region_colors[:badge_border] %> <%= region_colors[:badge_text] %> text-xs font-semibold">
         <%= team.region || 'N/A' %>
       </span>
     </div>
 
-    <% if team.org_location.present? && mode == 'full' %>
-      <!-- Location (only in full mode) -->
-      <p class="text-center text-xs text-gray-500 mb-3">
-        📍 <%= team.org_location %>
+    <% if team.org_location.present? && (mode == 'full' || mode == 'editorial') %>
+      <!-- Location -->
+      <p class="text-center text-sm text-gray-500 mb-3">
+        <%= team.org_location %>
       </p>
     <% end %>
 
@@ -56,8 +72,8 @@
     <div class="flex-grow"></div>
 
     <!-- Player Count at Bottom -->
-    <div class="mt-auto pt-3 border-t border-gray-700/30">
-      <div class="flex items-center justify-center gap-2 text-xs text-gray-400">
+    <div class="mt-auto pt-4 border-t border-gray-700/30">
+      <div class="flex items-center justify-center gap-2 text-sm text-gray-400">
         <svg class="w-4 h-4 text-lol-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
