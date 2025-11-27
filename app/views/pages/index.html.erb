@@ -16,6 +16,24 @@
     </p>
   </div>
 
+  <!-- Data Freshness Info Banner -->
+  <div class="mb-6 animate-[fadeInUp_0.6s_ease-out]" style="animation-delay: 0.1s;">
+    <div class="max-w-3xl mx-auto">
+      <div class="bg-lol-blue/10 backdrop-blur-sm border border-lol-blue/30 rounded-lg px-4 py-3
+                  shadow-[0_0_15px_rgba(84,140,180,0.1)] hover:shadow-[0_0_20px_rgba(84,140,180,0.2)]
+                  transition-all duration-300">
+        <p class="text-center text-sm md:text-base text-gray-300 flex items-center justify-center gap-2 flex-wrap">
+          <span class="text-lol-blue-300 text-lg">🔄</span>
+          <span>
+            <span class="text-lol-blue-300 font-semibold">Fresh data synced from Leaguepedia!</span>
+            <span class="text-gray-400 mx-1">•</span>
+            <span class="text-gray-400">Updated regularly - spot something off? Let us know!</span>
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+
   <% if @all_teams.any? %>
     <!-- Search Bar -->
     <div class="mb-6 animate-[fadeInUp_0.6s_ease-out]">

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Leagueroster Pedia" %></title>
+    <title><%= content_for(:title) || "League Rosters" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -27,7 +27,7 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="relative min-h-screen text-gray-100 antialiased overflow-x-hidden">
+  <body class="relative min-h-screen flex flex-col text-gray-100 antialiased overflow-x-hidden">
     <!-- Animated gradient background -->
     <div class="fixed inset-0 bg-gradient-to-br from-navy-900 via-[#0D1428] to-navy-800 animate-[gradientShift_20s_ease_infinite]" style="background-size: 400% 400%; z-index: 0;"></div>
 
@@ -37,11 +37,12 @@
     <!-- Grid pattern overlay -->
     <div class="fixed inset-0 opacity-[0.03]" style="background-image: linear-gradient(rgba(196, 161, 91, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(196, 161, 91, 0.3) 1px, transparent 1px); background-size: 50px 50px; z-index: 0;"></div>
 
-    <main class="relative w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-6 sm:py-8" style="z-index: 1;">
+    <main class="relative flex-grow w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-6 sm:py-8" style="z-index: 1;">
       <%= render 'shared/header' %>
       <%= yield %>
     </main>
 
+    <%= render 'shared/footer' %>
     <%= render 'shared/team_modal' %>
   </body>
 </html>
