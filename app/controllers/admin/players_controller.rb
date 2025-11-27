@@ -15,6 +15,8 @@ module Admin
         )
       end
 
+      @players = @players.page(params[:page])
+
       add_breadcrumb "Players"
     end
 

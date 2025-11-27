@@ -15,6 +15,8 @@ module Admin
         )
       end
 
+      @teams = @teams.page(params[:page])
+
       add_breadcrumb "Teams"
     end
 

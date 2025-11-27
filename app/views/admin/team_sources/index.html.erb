@@ -89,4 +89,11 @@
   </div>
 </div>
 
-<%= paginate @team_sources %>
+<div class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+  <div class="text-sm text-gray-600">
+    <%= page_entries_info @team_sources, entry_name: 'team source' %>
+  </div>
+  <div>
+    <%= paginate @team_sources %>
+  </div>
+</div>
