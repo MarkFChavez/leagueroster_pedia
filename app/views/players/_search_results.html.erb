@@ -5,7 +5,6 @@
         <%= link_to team_path(player.team), class: "block px-4 py-3 hover:bg-gray-700 transition-colors duration-150" do %>
           <div class="flex items-center justify-between">
             <div class="flex items-center flex-1">
-              <%= player_image_tag(player, size: 'small', css_class: 'mr-3 flex-shrink-0') %>
               <div class="flex-1 min-w-0">
                 <div class="font-semibold text-gold-400 text-lg truncate"><%= player.ign %></div>
                 <div class="text-sm text-gray-400">

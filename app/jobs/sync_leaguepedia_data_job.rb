@@ -41,6 +41,7 @@ class SyncLeaguepediaDataJob < ApplicationJob
 
     roster_data.each do |player_data|
       player = team.players.find_or_initialize_by(ign: player_data['ID'])
+      is_new = player.new_record?
 
       player.assign_attributes(
         real_name: player_data['Name'],
@@ -49,14 +50,14 @@ class SyncLeaguepediaDataJob < ApplicationJob
         age: player_data['Age']&.to_i,
         birthdate: parse_date(player_data['Birthdate']),
         role: player_data['Role'],
-        image_url: player_data['Image'],
         date_joined: parse_date(player_data['DateJoin']),
         is_current: player_data['IsCurrent'] == '1',
         last_synced_at: Time.current
       )
 
       player.save!
-      Rails.logger.info("  Player synced: #{player.ign} - #{player.real_name} (#{player.role})")
+      action = is_new ? "Created" : "Updated"
+      Rails.logger.info("  #{action} player: #{player.ign} - #{player.real_name} (#{player.role})")
     end
 
     Rails.logger.info("✓ Successfully synced #{team.name} with #{roster_data.count} players")

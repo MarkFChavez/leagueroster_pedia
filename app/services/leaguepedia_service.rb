@@ -109,7 +109,7 @@ class LeaguepediaService
     {
       'Name' => full_name,
       'Short' => extract_infobox_value(infobox, ['Short', 'Abbreviation', 'Tag']) || team_name,
-      'Region' => extract_infobox_value(infobox, ['Region']),
+      'Region' => extract_region(infobox),
       'Image' => extract_team_logo(infobox),
       'Website' => extract_infobox_link(infobox, ['Website', 'Web']),
       'IsDisbanded' => detect_disbanded(doc) ? '1' : '0'
@@ -212,7 +212,6 @@ class LeaguepediaService
       'Age' => extract_age(infobox),
       'Birthdate' => extract_infobox_value(infobox, ['Birth', 'Birthdate', 'Date of Birth', 'Born']),
       'Role' => extract_infobox_value(infobox, ['Role', 'Position', 'Main Role']),
-      'Image' => extract_player_image(infobox),
       'DateJoin' => nil, # Not easily available from player page
       'IsCurrent' => '1' # Assume current since we're scraping from current roster
     }
@@ -264,6 +263,26 @@ class LeaguepediaService
     first_half == second_half ? first_half : text
   end
 
+  # Extract region from infobox
+  # Priority: .region-icon (region code) -> .markup-object-name (region name)
+  def extract_region(infobox)
+    # First, try to get region code from .region-icon
+    region_icon = infobox.at_css('.region-icon')
+    if region_icon
+      region_code = region_icon.text&.strip
+      return region_code if region_code.present?
+    end
+
+    # Fallback to .markup-object-name (full region name)
+    region_name = infobox.at_css('.markup-object-name')
+    if region_name
+      full_name = region_name.text&.strip
+      return full_name if full_name.present?
+    end
+
+    nil
+  end
+
   # Extract team logo URL from infobox
   def extract_team_logo(infobox)
     img = infobox.at_css('img')
@@ -271,22 +290,6 @@ class LeaguepediaService
 
     src = img['src'] || img['data-src']
     return nil unless src
-
-    # Convert to absolute URL if needed
-    src.start_with?('http') ? src : "https:#{src}"
-  end
-
-  # Extract player image URL from infobox
-  def extract_player_image(infobox)
-    # Player images are typically in the infobox image/header area
-    img = infobox.at_css('img')
-    return nil unless img
-
-    src = img['src'] || img['data-src']
-    return nil unless src
-
-    # Skip role sprites and small icons
-    return nil if src.include?('role_sprite') || src.include?('Icon')
 
     # Convert to absolute URL if needed
     src.start_with?('http') ? src : "https:#{src}"
