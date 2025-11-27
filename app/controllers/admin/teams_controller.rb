@@ -14,7 +14,6 @@ module Admin
 
     def new
       @team = Team.new
-      @team_sources = TeamSource.order(:short_name)
       add_breadcrumb "Teams", admin_teams_path
       add_breadcrumb "New"
     end
@@ -25,7 +24,6 @@ module Admin
       if @team.save
         redirect_to admin_team_path(@team), notice: "Team was successfully created."
       else
-        @team_sources = TeamSource.order(:short_name)
         add_breadcrumb "Teams", admin_teams_path
         add_breadcrumb "New"
         render :new, status: :unprocessable_entity
@@ -33,7 +31,6 @@ module Admin
     end
 
     def edit
-      @team_sources = TeamSource.order(:short_name)
       add_breadcrumb "Edit"
     end
 
@@ -41,7 +38,6 @@ module Admin
       if @team.update(team_params)
         redirect_to admin_team_path(@team), notice: "Team was successfully updated."
       else
-        @team_sources = TeamSource.order(:short_name)
         add_breadcrumb "Edit"
         render :edit, status: :unprocessable_entity
       end
@@ -60,7 +56,7 @@ module Admin
 
     def set_team_breadcrumbs
       add_breadcrumb "Teams", admin_teams_path
-      add_breadcrumb "Team ##{@team.id}"
+      add_breadcrumb "##{@team.id}"
     end
 
     def set_team

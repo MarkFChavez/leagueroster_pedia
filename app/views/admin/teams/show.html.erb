@@ -19,17 +19,26 @@
     <div class="space-y-4">
       <div>
         <label class="block text-sm font-semibold text-purple-400 mb-1">Team Source</label>
-        <p class="text-gray-300 text-lg"><%= @team.team_source.short_name %></p>
+        <%= link_to @team.team_source.short_name, admin_team_source_path(@team.team_source), class: "text-purple-400 hover:text-purple-300 underline text-lg" %>
+        <p class="text-gray-500 text-sm mt-1"><%= @team.team_source.long_name %></p>
       </div>
 
       <div>
         <label class="block text-sm font-semibold text-purple-400 mb-1">Org Location</label>
-        <p class="text-gray-300 text-lg"><%= @team.org_location %></p>
+        <% if @team.org_location.present? %>
+          <p class="text-gray-300 text-lg"><%= @team.org_location %></p>
+        <% else %>
+          <p class="text-gray-600 text-lg">Not set</p>
+        <% end %>
       </div>
 
       <div>
         <label class="block text-sm font-semibold text-purple-400 mb-1">Region</label>
-        <p class="text-gray-300 text-lg"><%= @team.region %></p>
+        <% if @team.region.present? %>
+          <p class="text-gray-300 text-lg"><%= @team.region %></p>
+        <% else %>
+          <p class="text-gray-600 text-lg">Not set</p>
+        <% end %>
       </div>
 
       <div>

@@ -17,6 +17,5 @@ Rails.application.routes.draw do
     root "dashboard#index"
     resources :team_sources
     resources :teams
-    resources :players
   end
 end

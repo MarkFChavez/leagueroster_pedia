@@ -12,17 +12,20 @@
 
   <div>
     <%= form.label :team_source_id, "Team Source", class: "block text-sm font-semibold text-purple-400 mb-2" %>
-    <%= form.collection_select :team_source_id, @team_sources, :id, :short_name, { prompt: "Select a team source" }, class: "w-full px-4 py-3 bg-gray-800/50 border border-gray-700/50 rounded-lg text-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent" %>
+    <%= form.collection_select :team_source_id, TeamSource.order(:short_name), :id, :short_name, { prompt: "Select a team source" }, class: "w-full px-4 py-3 bg-gray-800/50 border border-gray-700/50 rounded-lg text-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent" %>
+    <p class="text-gray-500 text-sm mt-1">The source where this team's data comes from</p>
   </div>
 
   <div>
     <%= form.label :org_location, class: "block text-sm font-semibold text-purple-400 mb-2" %>
-    <%= form.text_field :org_location, class: "w-full px-4 py-3 bg-gray-800/50 border border-gray-700/50 rounded-lg text-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent", placeholder: "e.g., Seoul, South Korea" %>
+    <%= form.text_field :org_location, class: "w-full px-4 py-3 bg-gray-800/50 border border-gray-700/50 rounded-lg text-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent", placeholder: "e.g., South Korea" %>
+    <p class="text-gray-500 text-sm mt-1">The country where the organization is located</p>
   </div>
 
   <div>
     <%= form.label :region, class: "block text-sm font-semibold text-purple-400 mb-2" %>
-    <%= form.text_field :region, class: "w-full px-4 py-3 bg-gray-800/50 border border-gray-700/50 rounded-lg text-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent", placeholder: "e.g., LCK, LEC, LCS" %>
+    <%= form.text_field :region, class: "w-full px-4 py-3 bg-gray-800/50 border border-gray-700/50 rounded-lg text-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent", placeholder: "e.g., KR" %>
+    <p class="text-gray-500 text-sm mt-1">The competitive region (e.g., KR, EMEA, NA)</p>
   </div>
 
   <div class="flex gap-3 pt-4">
