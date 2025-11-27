@@ -1,19 +1,35 @@
 <div class="animate-[fadeIn_0.8s_ease-out]">
   <!-- Header Section -->
   <div class="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6 mb-6">
-    <div class="flex justify-between items-center">
-      <div>
-        <h2 class="text-3xl font-bold mb-2">
-          <span class="bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">
-            Players
-          </span>
-        </h2>
-        <p class="text-gray-400">
-          Manage player records and roster data
-        </p>
+    <h2 class="text-3xl font-bold mb-2">
+      <span class="bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">
+        Players
+      </span>
+    </h2>
+    <p class="text-gray-400">
+      View player records synced from Team Sources
+    </p>
+  </div>
+
+  <!-- Search Section -->
+  <div class="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-lg p-4 mb-6">
+    <%= form_with url: admin_players_path, method: :get, class: "flex gap-3" do |f| %>
+      <div class="flex-1">
+        <%= f.text_field :q,
+            value: params[:q],
+            placeholder: "Search by player, role, or team...",
+            class: "w-full bg-gray-900/50 border border-gray-700 rounded-lg px-4 py-2 text-gray-300 placeholder-gray-500 focus:outline-none focus:border-blue-700" %>
       </div>
-      <%= link_to "New Player", new_admin_player_path, class: "bg-blue-800 hover:bg-blue-900 text-white font-semibold py-3 px-6 rounded-lg transition-colors" %>
-    </div>
+      <%= f.submit "Search", class: "bg-blue-800 hover:bg-blue-900 text-white font-semibold px-6 rounded-lg transition-colors cursor-pointer" %>
+      <% if params[:q].present? %>
+        <%= link_to "Clear", admin_players_path, class: "bg-gray-700 hover:bg-gray-600 text-white font-semibold px-6 rounded-lg transition-colors flex items-center" %>
+      <% end %>
+    <% end %>
+    <% if params[:q].present? %>
+      <div class="text-gray-400 text-sm mt-2">
+        Found <%= @players.count %> result(s) for "<%= params[:q] %>"
+      </div>
+    <% end %>
   </div>
 
   <!-- Table Section -->
@@ -47,19 +63,15 @@
                 <%= player.date_joined.present? ? player.date_joined.strftime("%b %d, %Y") : content_tag(:span, "-", class: "text-gray-600") %>
               </td>
               <td class="px-6 py-4">
-                <div class="flex gap-2">
-                  <%= link_to "View", admin_player_path(player), class: "text-blue-400 hover:text-blue-300 font-medium" %>
-                  <%= link_to "Edit", edit_admin_player_path(player), class: "text-blue-400 hover:text-blue-300 font-medium" %>
-                  <%= button_to "Delete", admin_player_path(player), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "text-red-400 hover:text-red-300 font-medium" %>
-                </div>
+                <%= link_to "View", admin_player_path(player), class: "text-blue-400 hover:text-blue-300 font-medium" %>
               </td>
             </tr>
           <% end %>
         <% else %>
           <tr>
             <td colspan="7" class="px-6 py-12 text-center text-gray-500">
-              <p class="text-lg mb-4">No players found</p>
-              <%= link_to "Create your first player", new_admin_player_path, class: "text-blue-400 hover:text-blue-300 underline" %>
+              <p class="text-lg">No players found</p>
+              <p class="text-sm mt-2">Players are synced from Team Sources</p>
             </td>
           </tr>
         <% end %>

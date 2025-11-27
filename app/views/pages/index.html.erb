@@ -1,6 +1,114 @@
-<div class="min-h-screen flex items-center justify-center">
-  <div class="text-center">
-    <h1 class="text-4xl font-bold text-gray-300 mb-4">Welcome</h1>
-    <p class="text-gray-500">Homepage coming soon...</p>
+<%
+  # Design Concept 2: "Regional Leagues"
+  # Modular structure allows easy switching to other concepts by replacing this file
+  # while keeping the shared/_team_card.html.erb component
+%>
+
+<div class="animate-[fadeIn_0.8s_ease-out] pb-12">
+  <!-- Welcome Section -->
+  <div class="text-center mb-12 animate-[fadeInUp_0.6s_ease-out]">
+    <h2 class="text-3xl md:text-4xl font-bold mb-3">
+      <span class="bg-gradient-to-r from-lol-gold via-lol-gold-300 to-lol-gold bg-clip-text text-transparent">
+        Professional Teams
+      </span>
+    </h2>
+    <p class="text-gray-400 text-sm md:text-base">
+      Browse teams by their competitive regions
+    </p>
   </div>
+
+  <% if @teams_by_region.any? %>
+    <!-- Regional Sections -->
+    <div class="space-y-10">
+      <% @teams_by_region.each_with_index do |(region, teams), index| %>
+        <div class="animate-[fadeInUp_0.6s_ease-out]" style="animation-delay: <%= index * 0.1 %>s;">
+          <!-- Region Header -->
+          <div class="mb-6">
+            <div class="flex items-center gap-4 mb-2">
+              <!-- Decorative line -->
+              <div class="h-1 flex-grow bg-gradient-to-r from-lol-gold/50 via-lol-gold/20 to-transparent rounded-full"></div>
+
+              <!-- Region Name -->
+              <h3 class="text-2xl md:text-3xl font-black uppercase tracking-wider flex-shrink-0">
+                <span class="bg-gradient-to-r from-lol-blue-300 via-lol-blue-200 to-lol-blue-300 bg-clip-text text-transparent
+                             drop-shadow-[0_0_20px_rgba(84,140,180,0.5)]">
+                  <%= region %>
+                </span>
+              </h3>
+
+              <!-- Decorative line -->
+              <div class="h-1 flex-grow bg-gradient-to-l from-lol-gold/50 via-lol-gold/20 to-transparent rounded-full"></div>
+            </div>
+
+            <!-- Team count -->
+            <p class="text-center text-xs text-gray-500 uppercase tracking-wider">
+              <%= teams.count %> team<%= teams.count != 1 ? 's' : '' %>
+            </p>
+          </div>
+
+          <!-- Teams Horizontal Scroll -->
+          <div class="relative group/scroll">
+            <!-- Scroll container -->
+            <div class="overflow-x-auto pb-4 scrollbar-hide hover:scrollbar-show
+                        [-webkit-overflow-scrolling:touch] scroll-smooth">
+              <div class="flex gap-4 px-1">
+                <% teams.each do |team| %>
+                  <%= render 'shared/team_card', team: team, mode: 'compact' %>
+                <% end %>
+              </div>
+            </div>
+
+            <!-- Scroll fade indicators (desktop only) -->
+            <div class="hidden md:block absolute top-0 left-0 h-full w-16 bg-gradient-to-r from-[#0A0E27] to-transparent pointer-events-none
+                        opacity-0 group-hover/scroll:opacity-100 transition-opacity duration-300"></div>
+            <div class="hidden md:block absolute top-0 right-0 h-full w-16 bg-gradient-to-l from-[#0A0E27] to-transparent pointer-events-none
+                        opacity-0 group-hover/scroll:opacity-100 transition-opacity duration-300"></div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <!-- Empty State -->
+    <div class="text-center py-20 animate-[fadeInUp_0.6s_ease-out]">
+      <div class="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-lg p-12 max-w-md mx-auto">
+        <svg class="w-16 h-16 mx-auto mb-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+        </svg>
+        <h3 class="text-xl font-bold text-gray-400 mb-2">No Teams Yet</h3>
+        <p class="text-gray-500 text-sm">
+          Teams will appear here once they're synced from Team Sources.
+        </p>
+      </div>
+    </div>
+  <% end %>
 </div>
+
+<!-- Custom scrollbar styling -->
+<style>
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-show:hover {
+    scrollbar-width: thin;
+  }
+  .scrollbar-show:hover::-webkit-scrollbar {
+    display: block;
+    height: 6px;
+  }
+  .scrollbar-show:hover::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+  }
+  .scrollbar-show:hover::-webkit-scrollbar-thumb {
+    background: rgba(196, 161, 91, 0.3);
+    border-radius: 3px;
+  }
+  .scrollbar-show:hover::-webkit-scrollbar-thumb:hover {
+    background: rgba(196, 161, 91, 0.5);
+  }
+</style>

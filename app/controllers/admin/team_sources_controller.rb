@@ -6,6 +6,15 @@ module Admin
 
     def index
       @team_sources = TeamSource.order(created_at: :desc)
+
+      if params[:q].present?
+        search_term = "%#{params[:q]}%"
+        @team_sources = @team_sources.where(
+          "short_name LIKE ? OR long_name LIKE ? OR external_team_url LIKE ?",
+          search_term, search_term, search_term
+        )
+      end
+
       add_breadcrumb "Team Sources"
     end
 
