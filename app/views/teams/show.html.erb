@@ -65,8 +65,8 @@
         <table class="min-w-full divide-y divide-navy-600">
           <thead class="bg-navy-800">
             <tr>
+              <th scope="col" class="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-left text-xs font-bold text-lol-gold uppercase tracking-wider whitespace-nowrap">Player</th>
               <th scope="col" class="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-left text-xs font-bold text-lol-gold uppercase tracking-wider whitespace-nowrap">Role</th>
-              <th scope="col" class="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-left text-xs font-bold text-lol-gold uppercase tracking-wider whitespace-nowrap">IGN</th>
               <th scope="col" class="hidden sm:table-cell px-4 lg:px-6 py-3 sm:py-4 text-left text-xs font-bold text-lol-gold uppercase tracking-wider whitespace-nowrap">Real Name</th>
               <th scope="col" class="hidden md:table-cell px-4 lg:px-6 py-3 sm:py-4 text-left text-xs font-bold text-lol-gold uppercase tracking-wider whitespace-nowrap">Nationality</th>
               <th scope="col" class="hidden lg:table-cell px-6 py-4 text-left text-xs font-bold text-lol-gold uppercase tracking-wider whitespace-nowrap">Age</th>
@@ -76,11 +76,14 @@
           <tbody class="divide-y divide-navy-600">
             <% @current_players.each_with_index do |player, index| %>
               <tr class="hover:bg-navy-600 transition-colors duration-150 opacity-0 animate-[fadeInUp_0.4s_ease-out]" style="animation-delay: <%= 0.3 + (index * 0.1) %>s; animation-fill-mode: forwards;">
+                <td class="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
+                  <div class="flex items-center">
+                    <%= player_image_tag(player, size: 'medium', css_class: 'mr-3') %>
+                    <div class="text-sm sm:text-base font-bold text-white"><%= player.ign %></div>
+                  </div>
+                </td>
                 <td class="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap text-sm text-gray-300">
                   <%= player.role || 'N/A' %>
-                </td>
-                <td class="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
-                  <div class="text-sm sm:text-base font-bold text-white"><%= player.ign %></div>
                 </td>
                 <td class="hidden sm:table-cell px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
                   <div class="text-sm text-gray-300"><%= player.real_name.presence || '-' %></div>

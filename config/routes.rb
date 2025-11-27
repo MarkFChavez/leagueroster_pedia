@@ -14,4 +14,7 @@ Rails.application.routes.draw do
 
   # Teams routes
   resources :teams, only: [:index, :show]
+
+  # Players routes
+  get "players/search", to: "players#search"
 end

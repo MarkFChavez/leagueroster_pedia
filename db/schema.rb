@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_26_095645) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_27_044203) do
   create_table "players", force: :cascade do |t|
     t.string "ign"
     t.string "real_name"
@@ -26,6 +26,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_26_095645) do
     t.datetime "last_synced_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "image_url"
+    t.index ["ign"], name: "index_players_on_ign"
     t.index ["team_id"], name: "index_players_on_team_id"
   end
 

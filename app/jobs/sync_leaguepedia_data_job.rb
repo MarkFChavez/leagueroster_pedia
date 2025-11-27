@@ -49,6 +49,7 @@ class SyncLeaguepediaDataJob < ApplicationJob
         age: player_data['Age']&.to_i,
         birthdate: parse_date(player_data['Birthdate']),
         role: player_data['Role'],
+        image_url: player_data['Image'],
         date_joined: parse_date(player_data['DateJoin']),
         is_current: player_data['IsCurrent'] == '1',
         last_synced_at: Time.current
