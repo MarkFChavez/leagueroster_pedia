@@ -46,7 +46,6 @@ export default class extends Controller {
     const teamName = button.dataset.teamName
     const teamLongName = button.dataset.teamLongName
     const teamRegion = button.dataset.teamRegion
-    const teamInitials = teamName.substring(0, 2).toUpperCase()
 
     // Get roster data (passed as JSON string)
     const roster = JSON.parse(button.dataset.teamRoster || '[]')
@@ -54,7 +53,7 @@ export default class extends Controller {
     // Update modal content
     this.teamNameTarget.textContent = teamName
     this.teamLongNameTarget.textContent = teamLongName
-    this.teamInitialsTarget.textContent = teamInitials
+    this.teamInitialsTarget.textContent = teamName
     this.teamRegionTarget.textContent = teamRegion || 'N/A'
     this.viewFullLinkTarget.href = `/teams/${teamId}`
 
@@ -88,6 +87,22 @@ export default class extends Controller {
     }
   }
 
+  // Helper: Check if contract is expired
+  isContractExpired(contractEnds) {
+    if (!contractEnds) return false
+    const today = new Date()
+    const contractDate = new Date(contractEnds)
+    return contractDate < today
+  }
+
+  // Helper: Format date as "MMM YYYY"
+  formatDateMonthYear(dateString) {
+    if (!dateString) return ''
+    const date = new Date(dateString)
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    return `${months[date.getMonth()]} ${date.getFullYear()}`
+  }
+
   // Render roster list
   renderRoster(roster) {
     if (!roster || roster.length === 0) {
@@ -115,9 +130,32 @@ export default class extends Controller {
 
       const nameHTML = player.name ? `<p class="text-xs text-gray-500">${player.name}</p>` : ''
 
+      // Generate contract HTML
+      let contractHTML = ''
+      if (player.contract_ends) {
+        if (this.isContractExpired(player.contract_ends)) {
+          contractHTML = `
+            <div class="mt-2 pt-2 border-t border-gray-700/30">
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold
+                           bg-red-500/20 border border-red-500 text-red-400 mb-1">
+                CONTRACT ENDED
+              </span>
+              <span class="block text-gray-600 text-xs">Ended ${this.formatDateMonthYear(player.contract_ends)}</span>
+            </div>
+          `
+        } else {
+          contractHTML = `
+            <div class="mt-2 pt-2 border-t border-gray-700/30 text-xs">
+              <span class="block text-gray-600">Contract Until</span>
+              <span class="font-medium text-gray-400">${this.formatDateMonthYear(player.contract_ends)}</span>
+            </div>
+          `
+        }
+      }
+
       return `
         <div class="${colors.bg} border-l-4 ${colors.border} rounded-lg p-3">
-          <div class="flex items-center justify-between">
+          <div class="flex items-center justify-between mb-2">
             <div class="flex-1 min-w-0">
               <h5 class="font-bold text-gray-100 truncate">${player.ign}</h5>
               ${nameHTML}
@@ -126,6 +164,7 @@ export default class extends Controller {
               ${player.role || 'N/A'}
             </span>
           </div>
+          ${contractHTML}
         </div>
       `
     }).join('')

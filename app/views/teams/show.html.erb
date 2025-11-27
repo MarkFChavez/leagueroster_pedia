@@ -1,6 +1,6 @@
 <%
-  # Get team logo configuration
-  logo_config = team_logo_config(@team.team_source.short_name)
+  # Get team logo configuration (region-based)
+  logo_config = team_logo_config(@team)
 %>
 
 <div class="animate-[fadeIn_0.8s_ease-out] pb-12">
@@ -18,13 +18,10 @@
 
     <!-- Team Header -->
     <div class="flex items-start gap-6 mb-6">
-      <!-- Team Logo Shape -->
+      <!-- Team Logo Circle -->
       <div class="w-24 h-24 flex-shrink-0 bg-gradient-to-br <%= logo_config[:gradient_from] %> <%= logo_config[:gradient_to] %>
                   flex items-center justify-center shadow-glow border <%= logo_config[:border_color] %>
-                  <%= logo_config[:shape] == 'circle' ? 'rounded-full' : '' %>"
-           <% if logo_config[:clip_path].present? %>
-             style="clip-path: <%= logo_config[:clip_path] %>;"
-           <% end %>>
+                  rounded-full">
         <span class="text-3xl font-black <%= logo_config[:text_color] %>">
           <%= @team.team_source.short_name %>
         </span>
@@ -127,10 +124,16 @@
                 <% end %>
                 <% if player.contract_ends.present? %>
                   <div>
-                    <span class="block text-gray-600">Contract Until</span>
-                    <span class="font-medium <%= player.contract_ends < Date.today ? 'text-red-400' : '' %>">
-                      <%= player.contract_ends.strftime("%b %Y") %>
-                    </span>
+                    <% if player.contract_ends < Date.today %>
+                      <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold
+                                   bg-red-500/20 border border-red-500 text-red-400 mb-1">
+                        CONTRACT ENDED
+                      </span>
+                      <span class="block text-gray-600 text-xs">Ended <%= player.contract_ends.strftime("%b %Y") %></span>
+                    <% else %>
+                      <span class="block text-gray-600">Contract Until</span>
+                      <span class="font-medium"><%= player.contract_ends.strftime("%b %Y") %></span>
+                    <% end %>
                   </div>
                 <% end %>
               </div>

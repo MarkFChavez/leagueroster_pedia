@@ -55,14 +55,14 @@ class TeamSource < ApplicationRecord
 
   def extract_player_data(row)
     cells = row.css("td")
-    return nil if cells.size < 7
+    return nil if cells.size < 6
 
     # Extract data from specific column indices
     # Column 2: Player (IGN)
     # Column 3: Name (Real name)
     # Column 4: Role
-    # Column 5: Contract Ends
-    # Column 6: Date Joined
+    # Column 5: Contract Ends (may not exist for some teams)
+    # Column 6: Date Joined (or Column 5 if no Contract Ends)
 
     ign = cells[2]&.text&.strip
     name = cells[3]&.text&.strip

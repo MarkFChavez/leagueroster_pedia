@@ -1,68 +1,104 @@
 module TeamsHelper
-  def team_logo_config(team_short_name)
+  def team_logo_config(team)
+    # Get region-based colors
+    region = team.region || 'Unknown'
+    region_colors = region_color_config(region)
+
+    # Map region colors to logo format
+    color_map = {
+      'LCK' => { base: 'red', rgba: '239,68,68' },
+      'LPL' => { base: 'yellow', rgba: '234,179,8' },
+      'LEC' => { base: 'blue', rgba: '59,130,246' },
+      'LCS' => { base: 'purple', rgba: '168,85,247' },
+      'PCS' => { base: 'green', rgba: '34,197,94' },
+      'VCS' => { base: 'teal', rgba: '20,184,166' },
+      'CBLOL' => { base: 'orange', rgba: '249,115,22' },
+      'LLA' => { base: 'pink', rgba: '236,72,153' }
+    }
+
+    color_info = color_map[region] || { base: 'gray', rgba: '156,163,175' }
+    base_color = color_info[:base]
+
+    # Return consistent circle config with region-based colors
+    {
+      shape: 'circle',
+      clip_path: nil,
+      gradient_from: "from-#{base_color}-600/20",
+      gradient_to: "to-#{base_color}-900/10",
+      border_color: "border-#{base_color}-500/30",
+      text_color: "text-#{base_color}-400",
+      hover_border: "group-hover:border-#{base_color}-400/50",
+      hover_shadow: "group-hover:shadow-[0_0_20px_rgba(#{color_info[:rgba]},0.4)]"
+    }
+  end
+
+  def region_color_config(region)
     configs = {
-      'T1' => {
-        shape: 'pentagon',
-        clip_path: 'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)',
-        gradient_from: 'from-red-600/20',
-        gradient_to: 'to-red-900/10',
-        border_color: 'border-red-500/30',
-        text_color: 'text-red-400',
-        hover_border: 'group-hover:border-red-400/50',
-        hover_shadow: 'group-hover:shadow-[0_0_20px_rgba(239,68,68,0.4)]'
+      'LCK' => {
+        border: 'border-red-500/30',
+        badge_bg: 'bg-red-500/10',
+        badge_border: 'border-red-500/30',
+        badge_text: 'text-red-400',
+        hover_border: 'hover:border-red-500/50'
       },
-      'G2' => {
-        shape: 'hexagon',
-        clip_path: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)',
-        gradient_from: 'from-blue-600/20',
-        gradient_to: 'to-blue-900/10',
-        border_color: 'border-blue-500/30',
-        text_color: 'text-blue-400',
-        hover_border: 'group-hover:border-blue-400/50',
-        hover_shadow: 'group-hover:shadow-[0_0_20px_rgba(59,130,246,0.4)]'
+      'LPL' => {
+        border: 'border-yellow-500/30',
+        badge_bg: 'bg-yellow-500/10',
+        badge_border: 'border-yellow-500/30',
+        badge_text: 'text-yellow-400',
+        hover_border: 'hover:border-yellow-500/50'
       },
-      'HLE' => {
-        shape: 'diamond',
-        clip_path: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
-        gradient_from: 'from-orange-600/20',
-        gradient_to: 'to-orange-900/10',
-        border_color: 'border-orange-500/30',
-        text_color: 'text-orange-400',
-        hover_border: 'group-hover:border-orange-400/50',
-        hover_shadow: 'group-hover:shadow-[0_0_20px_rgba(249,115,22,0.4)]'
+      'LEC' => {
+        border: 'border-blue-500/30',
+        badge_bg: 'bg-blue-500/10',
+        badge_border: 'border-blue-500/30',
+        badge_text: 'text-blue-400',
+        hover_border: 'hover:border-blue-500/50'
       },
-      'GENG' => {
-        shape: 'octagon',
-        clip_path: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)',
-        gradient_from: 'from-yellow-600/20',
-        gradient_to: 'to-yellow-900/10',
-        border_color: 'border-yellow-500/30',
-        text_color: 'text-yellow-400',
-        hover_border: 'group-hover:border-yellow-400/50',
-        hover_shadow: 'group-hover:shadow-[0_0_20px_rgba(234,179,8,0.4)]'
+      'LCS' => {
+        border: 'border-purple-500/30',
+        badge_bg: 'bg-purple-500/10',
+        badge_border: 'border-purple-500/30',
+        badge_text: 'text-purple-400',
+        hover_border: 'hover:border-purple-500/50'
       },
-      'DK' => {
-        shape: 'triangle',
-        clip_path: 'polygon(50% 0%, 0% 100%, 100% 100%)',
-        gradient_from: 'from-indigo-600/20',
-        gradient_to: 'to-indigo-900/10',
-        border_color: 'border-indigo-500/30',
-        text_color: 'text-indigo-400',
-        hover_border: 'group-hover:border-indigo-400/50',
-        hover_shadow: 'group-hover:shadow-[0_0_20px_rgba(99,102,241,0.4)]'
+      'PCS' => {
+        border: 'border-green-500/30',
+        badge_bg: 'bg-green-500/10',
+        badge_border: 'border-green-500/30',
+        badge_text: 'text-green-400',
+        hover_border: 'hover:border-green-500/50'
+      },
+      'VCS' => {
+        border: 'border-teal-500/30',
+        badge_bg: 'bg-teal-500/10',
+        badge_border: 'border-teal-500/30',
+        badge_text: 'text-teal-400',
+        hover_border: 'hover:border-teal-500/50'
+      },
+      'CBLOL' => {
+        border: 'border-orange-500/30',
+        badge_bg: 'bg-orange-500/10',
+        badge_border: 'border-orange-500/30',
+        badge_text: 'text-orange-400',
+        hover_border: 'hover:border-orange-500/50'
+      },
+      'LLA' => {
+        border: 'border-pink-500/30',
+        badge_bg: 'bg-pink-500/10',
+        badge_border: 'border-pink-500/30',
+        badge_text: 'text-pink-400',
+        hover_border: 'hover:border-pink-500/50'
       }
     }
 
-    # Return config for the team or default circle config
-    configs[team_short_name.upcase] || {
-      shape: 'circle',
-      clip_path: nil,
-      gradient_from: 'from-lol-gold/20',
-      gradient_to: 'to-transparent',
-      border_color: 'border-lol-gold/30',
-      text_color: 'text-lol-gold',
-      hover_border: 'group-hover:border-lol-gold/50',
-      hover_shadow: 'group-hover:shadow-glow'
+    # Return config for the region or default gray config
+    configs[region] || {
+      border: 'border-gray-700/30',
+      badge_bg: 'bg-gray-700/10',
+      badge_border: 'border-gray-700/30',
+      badge_text: 'text-gray-400',
+      hover_border: 'hover:border-gray-700/50'
     }
   end
 end

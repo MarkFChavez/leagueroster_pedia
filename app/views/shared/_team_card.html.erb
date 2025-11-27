@@ -2,14 +2,14 @@
   player_count = team.players.count
   mode = local_assigns.fetch(:mode, 'compact')
   # Prepare roster data for modal
-  roster_json = team.players.map { |p| { ign: p.ign, name: p.name, role: p.role } }.to_json
-  # Get team logo configuration
-  logo_config = team_logo_config(team.team_source.short_name)
+  roster_json = team.players.map { |p| { ign: p.ign, name: p.name, role: p.role, contract_ends: p.contract_ends, date_joined: p.date_joined } }.to_json
+  # Get team logo configuration (region-based)
+  logo_config = team_logo_config(team)
 %>
 
 <div class="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-lg p-4
             hover:border-lol-gold/50 hover:shadow-glow-sm transition-all duration-300
-            group flex-shrink-0 <%= mode == 'compact' ? 'w-48' : 'w-full' %>
+            group flex-shrink-0 <%= mode == 'masonry' ? 'w-full' : (mode == 'compact' ? 'w-48' : 'w-full') %>
             flex flex-col cursor-pointer js-open-modal"
      data-team-id="<%= team.id %>"
      data-team-name="<%= team.team_source.short_name %>"
@@ -17,14 +17,11 @@
      data-team-region="<%= team.region %>"
      data-team-roster="<%= roster_json %>">
 
-  <!-- Team Logo Shape -->
+  <!-- Team Logo Circle -->
   <div class="w-16 h-16 mx-auto mb-3 bg-gradient-to-br <%= logo_config[:gradient_from] %> <%= logo_config[:gradient_to] %>
               flex items-center justify-center shadow-glow-sm border <%= logo_config[:border_color] %>
               <%= logo_config[:hover_shadow] %> <%= logo_config[:hover_border] %> transition-all duration-300
-              <%= logo_config[:shape] == 'circle' ? 'rounded-full' : '' %>"
-       <% if logo_config[:clip_path].present? %>
-         style="clip-path: <%= logo_config[:clip_path] %>;"
-       <% end %>>
+              rounded-full">
     <span class="text-xl font-black <%= logo_config[:text_color] %>">
       <%= team.team_source.short_name %>
     </span>
