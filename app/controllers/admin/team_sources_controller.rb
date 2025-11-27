@@ -1,6 +1,6 @@
 module Admin
   class TeamSourcesController < BaseController
-    before_action :set_team_source, only: [:show, :edit, :update, :destroy]
+    before_action :set_team_source, only: [:show, :edit, :update, :destroy, :sync]
     before_action :set_base_breadcrumbs
     before_action :set_team_source_breadcrumbs, only: [:show, :edit, :update]
 
@@ -46,6 +46,31 @@ module Admin
     def destroy
       @team_source.destroy
       redirect_to admin_team_sources_path, notice: "Team source was successfully deleted."
+    end
+
+    def sync
+      begin
+        # Set timeout to prevent long-running requests
+        Timeout.timeout(30) do
+          @team_source.sync
+
+          # Get sync results for feedback
+          team = @team_source.teams.first
+          player_count = team&.players&.count || 0
+
+          redirect_to admin_team_source_path(@team_source),
+                      notice: "Successfully synced #{@team_source.short_name}. Fetched #{player_count} players."
+        end
+      rescue Timeout::Error
+        redirect_to admin_team_source_path(@team_source),
+                    alert: "Sync timed out after 30 seconds. The source may be slow or unavailable."
+      rescue HTTParty::Error, SocketError => e
+        redirect_to admin_team_source_path(@team_source),
+                    alert: "Network error during sync: #{e.message}"
+      rescue StandardError => e
+        redirect_to admin_team_source_path(@team_source),
+                    alert: "Sync failed: #{e.message}"
+      end
     end
 
     private

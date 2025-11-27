@@ -3,16 +3,16 @@
   <div class="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6 mb-6">
     <h2 class="text-3xl font-bold">
       <span class="bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">
-        Edit Team
+        Edit Player
       </span>
     </h2>
     <p class="text-gray-400 mt-2">
-      Update Team #<%= @team.id %> details
+      Update <%= @player.ign %> details
     </p>
   </div>
 
   <!-- Form Section -->
   <div class="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6">
-    <%= render "form", team: @team %>
+    <%= render "form", player: @player %>
   </div>
 </div>

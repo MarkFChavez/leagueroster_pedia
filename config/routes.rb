@@ -15,7 +15,12 @@ Rails.application.routes.draw do
   # Admin routes
   namespace :admin do
     root "dashboard#index"
-    resources :team_sources
+    resources :team_sources do
+      member do
+        post :sync
+      end
+    end
     resources :teams
+    resources :players
   end
 end
