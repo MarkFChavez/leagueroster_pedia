@@ -26,4 +26,7 @@ Rails.application.routes.draw do
     resources :teams, only: [:index, :show]
     resources :players, only: [:index, :show]
   end
+
+  # Mount Mission Control Jobs dashboard (uses same auth as admin)
+  mount MissionControl::Jobs::Engine, at: "/admin/jobs"
 end
