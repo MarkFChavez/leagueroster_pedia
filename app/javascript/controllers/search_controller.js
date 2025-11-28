@@ -4,7 +4,7 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = [
     "input", "card", "resultCount", "clearButton",
-    "activeFilter", "activeFilterText",
+    "activeFilter", "activeFilterText", "regionButton",
     "preview", "previewResults", "previewEmpty", "previewFooter"
   ]
 
@@ -13,6 +13,9 @@ export default class extends Controller {
     this.activeRegion = null
     this.updateResultCount()
 
+    // Debounce timer
+    this.debounceTimer = null
+
     // Close preview on click outside
     this.boundClickOutside = this.clickOutside.bind(this)
     document.addEventListener('click', this.boundClickOutside)
@@ -20,6 +23,7 @@ export default class extends Controller {
 
   disconnect() {
     document.removeEventListener('click', this.boundClickOutside)
+    if (this.debounceTimer) clearTimeout(this.debounceTimer)
   }
 
   clickOutside(event) {
@@ -28,23 +32,34 @@ export default class extends Controller {
     }
   }
 
-  // Filter teams as user types
+  // Filter teams as user types (debounced)
   filter(event) {
     const query = this.inputTarget.value.toLowerCase().trim()
 
-    // Show/hide clear button
+    // Show/hide clear button immediately
     if (this.hasClearButtonTarget) {
       this.clearButtonTarget.classList.toggle('hidden', query === '')
     }
 
+    // Clear any pending debounce
+    if (this.debounceTimer) clearTimeout(this.debounceTimer)
+
     if (query === '') {
-      // Show all cards if search is empty
+      // Show all cards immediately when cleared
       this.showAllCards()
       this.updateResultCount()
       this.hidePreview()
       return
     }
 
+    // Debounce the actual filtering for performance
+    this.debounceTimer = setTimeout(() => {
+      this.performFilter(query)
+    }, 150)
+  }
+
+  // Perform the actual filtering logic
+  performFilter(query) {
     let visibleCount = 0
     const matchingCards = []
 
@@ -64,8 +79,8 @@ export default class extends Controller {
 
   // Check if a team card matches the search query
   matchesQuery(card, query) {
-    // Find the actual team card element inside the wrapper
-    const teamCardElement = card.querySelector('.js-open-modal')
+    // Find the actual team card element inside the wrapper (now an <a> tag)
+    const teamCardElement = card.querySelector('a[data-team-id]')
     if (!teamCardElement) return false
 
     // Get team data from card attributes
@@ -80,20 +95,15 @@ export default class extends Controller {
       return true
     }
 
-    // Check player IGNs from roster data
+    // Check player names (IGN and real names)
     try {
-      const roster = JSON.parse(teamCardElement.dataset.teamRoster || '[]')
-      const playerMatch = roster.some(player => {
-        const ign = (player.ign || '').toLowerCase()
-        const name = (player.name || '').toLowerCase()
-        return ign.includes(query) || name.includes(query)
-      })
-
-      if (playerMatch) {
-        return true
-      }
+      const players = JSON.parse(teamCardElement.dataset.teamPlayers || '[]')
+      const playerMatch = players.some(name =>
+        (name || '').toLowerCase().includes(query)
+      )
+      if (playerMatch) return true
     } catch (e) {
-      console.warn('Error parsing roster data:', e)
+      console.warn('Error parsing player data:', e)
     }
 
     return false
@@ -160,10 +170,19 @@ export default class extends Controller {
       }
     })
 
+    // Highlight the selected region button
+    this.regionButtonTargets.forEach(button => {
+      if (button.dataset.region === region) {
+        button.classList.add('ring-2', 'ring-lol-gold', 'bg-lol-gold/10', 'scale-[1.02]')
+      } else {
+        button.classList.remove('ring-2', 'ring-lol-gold', 'bg-lol-gold/10', 'scale-[1.02]')
+      }
+    })
+
     // Show active filter indicator
     if (this.hasActiveFilterTarget && this.hasActiveFilterTextTarget) {
       this.activeFilterTarget.classList.remove('hidden')
-      this.activeFilterTextTarget.textContent = `Filtering by ${region}`
+      this.activeFilterTextTarget.textContent = region
     }
 
     this.updateResultCount(visibleCount)
@@ -185,6 +204,11 @@ export default class extends Controller {
     if (this.hasActiveFilterTarget) {
       this.activeFilterTarget.classList.add('hidden')
     }
+
+    // Remove highlight from all region buttons
+    this.regionButtonTargets.forEach(button => {
+      button.classList.remove('ring-2', 'ring-lol-gold', 'bg-lol-gold/10', 'scale-[1.02]')
+    })
   }
 
   // Show preview dropdown with matching results
@@ -201,15 +225,14 @@ export default class extends Controller {
 
       // Show first 5 results
       const resultsHtml = matchingCards.slice(0, 5).map(card => {
-        const teamCard = card.querySelector('.js-open-modal')
+        const teamCard = card.querySelector('a[data-team-id]')
         const name = teamCard.dataset.teamLongName
         const shortName = teamCard.dataset.teamName
         const region = teamCard.dataset.teamRegion
+        const href = teamCard.getAttribute('href')
         return `
-          <button type="button"
-                  data-action="click->search#selectPreviewResult"
-                  data-team-id="${teamCard.dataset.teamId}"
-                  class="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700/50 transition-colors text-left">
+          <a href="${href}"
+             class="block w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700/50 transition-colors text-left">
             <div class="w-10 h-10 rounded-full bg-gray-700/50 flex items-center justify-center text-sm font-bold text-lol-gold">
               ${shortName}
             </div>
@@ -217,7 +240,7 @@ export default class extends Controller {
               <div class="font-medium text-white truncate">${name}</div>
               <div class="text-xs text-gray-400">${region}</div>
             </div>
-          </button>
+          </a>
         `
       }).join('')
 
@@ -234,21 +257,9 @@ export default class extends Controller {
     }
   }
 
-  // Handle clicking a preview result
+  // Handle clicking a preview result (now handled by direct links)
   selectPreviewResult(event) {
-    const teamId = event.currentTarget.dataset.teamId
     this.hidePreview()
-
-    // Find and click the actual card to open modal
-    const card = this.cardTargets.find(c => {
-      const teamCard = c.querySelector('.js-open-modal')
-      return teamCard && teamCard.dataset.teamId === teamId
-    })
-
-    if (card) {
-      const teamCard = card.querySelector('.js-open-modal')
-      if (teamCard) teamCard.click()
-    }
   }
 
   // Scroll to full results section

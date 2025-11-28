@@ -17,7 +17,8 @@ class TeamSource < ApplicationRecord
     return unless infobox
 
     # Extract org_location and region from the infobox
-    org_location = extract_infobox_value(infobox, "Org Location")
+    # Try "Org Location" first, fall back to "Team Location"
+    org_location = extract_infobox_value(infobox, "Org Location") || extract_infobox_value(infobox, "Team Location")
     region = extract_infobox_value(infobox, "Region")
 
     # Create or update the team record

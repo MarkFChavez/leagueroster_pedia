@@ -1,15 +1,58 @@
 <%
   # Get team logo configuration (region-based)
   logo_config = team_logo_config(@team)
+
+  # Role normalization helper
+  normalize_role = ->(role) {
+    case role&.downcase
+    when ->(r) { r&.include?('bot') || r&.include?('adc') } then 'ADC'
+    when ->(r) { r&.include?('jun') } then 'Jungle'
+    when ->(r) { r&.include?('mid') } then 'Mid'
+    when ->(r) { r&.include?('top') } then 'Top'
+    when ->(r) { r&.include?('sup') } then 'Support'
+    else nil
+    end
+  }
+
+  # Role sort order: Top -> Jungle -> Mid -> ADC -> Support
+  role_order = %w[Top Jungle Mid ADC Support]
+  sort_by_role = ->(players) {
+    players.sort_by { |p|
+      normalized = normalize_role.call(p.role)
+      [role_order.index(normalized) || 999, p.ign.to_s]
+    }
+  }
+
+  # Separate active vs former players
+  active_players = @team.players.select { |p| p.contract_ends.nil? || p.contract_ends >= Date.today }
+  former_players = @team.players.select { |p| p.contract_ends.present? && p.contract_ends < Date.today }
+
+  # Sort each group by role
+  active_players = sort_by_role.call(active_players)
+  former_players = sort_by_role.call(former_players)
+
+  # Role color mapping with emojis
+  role_colors = {
+    'Top' => { bg: 'bg-role-top/10', border: 'border-role-top/30', text: 'text-role-top', badge_bg: 'bg-role-top/20', badge_border: 'border-role-top/50', badge_text: 'text-role-top-light', icon: '⚔️' },
+    'Jungle' => { bg: 'bg-role-jungle/10', border: 'border-role-jungle/30', text: 'text-role-jungle', badge_bg: 'bg-role-jungle/20', badge_border: 'border-role-jungle/50', badge_text: 'text-role-jungle-light', icon: '🌲' },
+    'Mid' => { bg: 'bg-role-mid/10', border: 'border-role-mid/30', text: 'text-role-mid', badge_bg: 'bg-role-mid/20', badge_border: 'border-role-mid/50', badge_text: 'text-role-mid-light', icon: '⚡' },
+    'ADC' => { bg: 'bg-role-adc/10', border: 'border-role-adc/30', text: 'text-role-adc', badge_bg: 'bg-role-adc/20', badge_border: 'border-role-adc/50', badge_text: 'text-role-adc-light', icon: '🎯' },
+    'Support' => { bg: 'bg-role-support/10', border: 'border-role-support/30', text: 'text-role-support', badge_bg: 'bg-role-support/20', badge_border: 'border-role-support/50', badge_text: 'text-role-support-light', icon: '🛡️' }
+  }
+  default_colors = { bg: 'bg-gray-800/30', border: 'border-gray-700/30', text: 'text-gray-400', badge_bg: 'bg-gray-700/20', badge_border: 'border-gray-600/50', badge_text: 'text-gray-300', icon: '❓' }
 %>
 
-<div class="animate-[fadeIn_0.8s_ease-out] pb-12">
+<div class="max-w-6xl mx-auto px-4 py-8">
+  <%= render 'shared/header' %>
+</div>
+
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 animate-[fadeIn_0.8s_ease-out] pb-8 md:pb-12">
   <!-- Header Section -->
-  <div class="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-lg p-8 mb-8 animate-[fadeInUp_0.6s_ease-out]">
+  <div class="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-lg p-4 md:p-6 lg:p-8 mb-4 md:mb-8 animate-[fadeInUp_0.6s_ease-out]">
     <!-- Back Link -->
-    <div class="mb-6">
-      <%= link_to root_path, class: "inline-flex items-center text-lol-blue-300 hover:text-lol-blue-200 transition-colors text-sm font-medium" do %>
-        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="mb-4 md:mb-6">
+      <%= link_to root_path, class: "inline-flex items-center text-lol-blue-300 hover:text-lol-blue-200 transition-colors text-sm font-medium group" do %>
+        <svg class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
         </svg>
         Back to All Teams
@@ -17,43 +60,43 @@
     </div>
 
     <!-- Team Header -->
-    <div class="flex items-start gap-6 mb-6">
+    <div class="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-6 mb-6">
       <!-- Team Logo Circle -->
-      <div class="w-24 h-24 flex-shrink-0 bg-gradient-to-br <%= logo_config[:gradient_from] %> <%= logo_config[:gradient_to] %>
+      <div class="w-20 h-20 md:w-24 md:h-24 flex-shrink-0 mx-auto md:mx-0 bg-gradient-to-br <%= logo_config[:gradient_from] %> <%= logo_config[:gradient_to] %>
                   flex items-center justify-center shadow-glow border <%= logo_config[:border_color] %>
                   rounded-full">
-        <span class="text-3xl font-black <%= logo_config[:text_color] %>">
+        <span class="text-2xl md:text-3xl font-black <%= logo_config[:text_color] %>">
           <%= @team.team_source.short_name %>
         </span>
       </div>
 
       <!-- Team Info -->
-      <div class="flex-1">
-        <h1 class="text-4xl md:text-5xl font-black mb-4">
+      <div class="flex-1 text-center md:text-left">
+        <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mb-3 md:mb-4">
           <span class="bg-gradient-to-r from-lol-gold via-lol-gold-300 to-lol-gold bg-clip-text text-transparent
                        drop-shadow-[0_0_25px_rgba(196,161,91,0.6)]">
             <%= @team.team_source.long_name %>
           </span>
         </h1>
 
-        <div class="flex flex-wrap gap-3">
+        <div class="flex flex-wrap justify-center md:justify-start gap-2 md:gap-3">
           <!-- Region Badge -->
-          <span class="inline-flex items-center px-3 py-1.5 rounded-full bg-lol-blue/20
-                       border border-lol-blue/50 text-lol-blue-300 font-semibold">
+          <span class="inline-flex items-center px-2.5 py-1 md:px-3 md:py-1.5 rounded-full bg-lol-blue/20
+                       border border-lol-blue/50 text-lol-blue-300 font-semibold text-sm">
             🏆 <%= @team.region || 'N/A' %>
           </span>
 
           <% if @team.org_location.present? %>
             <!-- Location Badge -->
-            <span class="inline-flex items-center px-3 py-1.5 rounded-full bg-gray-700/50
-                         border border-gray-600/50 text-gray-300">
+            <span class="inline-flex items-center px-2.5 py-1 md:px-3 md:py-1.5 rounded-full bg-gray-700/50
+                         border border-gray-600/50 text-gray-300 text-sm">
               📍 <%= @team.org_location %>
             </span>
           <% end %>
 
           <!-- Player Count Badge -->
-          <span class="inline-flex items-center px-3 py-1.5 rounded-full bg-lol-gold/20
-                       border border-lol-gold/50 text-lol-gold-300 font-semibold">
+          <span class="inline-flex items-center px-2.5 py-1 md:px-3 md:py-1.5 rounded-full bg-lol-gold/20
+                       border border-lol-gold/50 text-lol-gold-300 font-semibold text-sm">
             👥 <%= @team.players.count %> Players
           </span>
         </div>
@@ -76,67 +119,135 @@
   </div>
 
   <!-- Roster Section -->
-  <div class="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-lg p-8 animate-[fadeInUp_0.6s_ease-out]" style="animation-delay: 0.1s;">
-    <h2 class="text-2xl md:text-3xl font-bold mb-6">
-      <span class="bg-gradient-to-r from-lol-blue-300 to-lol-blue-200 bg-clip-text text-transparent">
-        Current Roster
-      </span>
-    </h2>
+  <div class="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-lg p-4 md:p-6 lg:p-8 animate-[fadeInUp_0.6s_ease-out]" style="animation-delay: 0.1s;">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="h-8 w-1 bg-gradient-to-b from-lol-gold to-lol-gold/50 rounded-full"></div>
+      <h2 class="text-xl md:text-2xl lg:text-3xl font-bold">
+        <span class="bg-gradient-to-r from-lol-blue-300 to-lol-blue-200 bg-clip-text text-transparent">
+          Roster
+        </span>
+      </h2>
+    </div>
 
     <% if @team.players.any? %>
-      <div class="space-y-3">
-        <% @team.players.order(:role).each do |player| %>
-          <%
-            # Role color mapping
-            role_colors = {
-              'Top' => { bg: 'bg-role-top/10', border: 'border-role-top/30', text: 'text-role-top', badge_bg: 'bg-role-top/20', badge_border: 'border-role-top/50', badge_text: 'text-role-top-light' },
-              'Jungle' => { bg: 'bg-role-jungle/10', border: 'border-role-jungle/30', text: 'text-role-jungle', badge_bg: 'bg-role-jungle/20', badge_border: 'border-role-jungle/50', badge_text: 'text-role-jungle-light' },
-              'Mid' => { bg: 'bg-role-mid/10', border: 'border-role-mid/30', text: 'text-role-mid', badge_bg: 'bg-role-mid/20', badge_border: 'border-role-mid/50', badge_text: 'text-role-mid-light' },
-              'ADC' => { bg: 'bg-role-adc/10', border: 'border-role-adc/30', text: 'text-role-adc', badge_bg: 'bg-role-adc/20', badge_border: 'border-role-adc/50', badge_text: 'text-role-adc-light' },
-              'Support' => { bg: 'bg-role-support/10', border: 'border-role-support/30', text: 'text-role-support', badge_bg: 'bg-role-support/20', badge_border: 'border-role-support/50', badge_text: 'text-role-support-light' }
-            }
-            colors = role_colors[player.role] || { bg: 'bg-gray-800/30', border: 'border-gray-700/30', text: 'text-gray-400', badge_bg: 'bg-gray-700/20', badge_border: 'border-gray-600/50', badge_text: 'text-gray-300' }
-          %>
+      <div data-controller="tabs" data-tabs-active-tab-value="active">
+        <!-- Tab Buttons -->
+        <div class="flex border-b border-gray-700/50 mb-6">
+          <button type="button"
+                  data-tabs-target="tab"
+                  data-tab-id="active"
+                  data-action="click->tabs#switch"
+                  class="px-4 py-2 font-semibold border-b-2 border-lol-gold text-lol-gold transition-colors">
+            Active Roster (<%= active_players.count %>)
+          </button>
+          <% if former_players.any? %>
+            <button type="button"
+                    data-tabs-target="tab"
+                    data-tab-id="former"
+                    data-action="click->tabs#switch"
+                    class="px-4 py-2 font-semibold border-b-2 border-transparent text-gray-400 hover:text-gray-300 transition-colors">
+              Expired Contracts (<%= former_players.count %>)
+            </button>
+          <% end %>
+        </div>
 
-          <div class="<%= colors[:bg] %> border-l-4 <%= colors[:border] %> rounded-lg p-4 hover:bg-gray-800/40 transition-colors">
-            <div class="flex flex-wrap items-center gap-4">
-              <!-- Player IGN -->
-              <div class="flex-1 min-w-0">
-                <h3 class="text-lg font-bold text-gray-100 truncate"><%= player.ign %></h3>
-                <% if player.name.present? %>
-                  <p class="text-sm text-gray-400"><%= player.name %></p>
-                <% end %>
-              </div>
+        <!-- Active Roster Panel -->
+        <div data-tabs-target="panel" data-tab-id="active">
+          <% if active_players.any? %>
+            <div class="space-y-3">
+              <% active_players.each do |player| %>
+                <% colors = role_colors[normalize_role.call(player.role)] || default_colors %>
+                <div class="<%= colors[:bg] %> border-l-4 <%= colors[:border] %> rounded-lg p-3 sm:p-4 hover:bg-gray-800/40 hover:-translate-y-0.5 hover:shadow-lg transition-all duration-200">
+                  <div class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+                    <!-- Player IGN -->
+                    <div class="w-full sm:w-auto sm:flex-1 sm:min-w-0">
+                      <div class="flex items-center gap-2">
+                        <span class="text-lg"><%= colors[:icon] %></span>
+                        <h3 class="text-base sm:text-lg font-bold text-gray-100 truncate"><%= player.ign %></h3>
+                      </div>
+                      <% if player.name.present? %>
+                        <p class="text-sm text-gray-400 ml-7"><%= player.name %></p>
+                      <% end %>
+                    </div>
 
-              <!-- Role Badge -->
-              <span class="inline-flex items-center px-3 py-1 rounded-full <%= colors[:badge_bg] %>
-                           border <%= colors[:badge_border] %> <%= colors[:badge_text] %> font-semibold text-sm">
-                <%= player.role || 'N/A' %>
-              </span>
+                    <!-- Role Badge -->
+                    <span class="self-start sm:self-auto inline-flex items-center px-3 py-1 rounded-full <%= colors[:badge_bg] %>
+                                 border <%= colors[:badge_border] %> <%= colors[:badge_text] %> font-semibold text-sm">
+                      <%= player.role || 'N/A' %>
+                    </span>
 
-              <!-- Dates -->
-              <div class="flex gap-4 text-xs text-gray-500">
-                <% if player.date_joined.present? %>
-                  <div>
-                    <span class="block text-gray-600">Joined</span>
-                    <span class="font-medium"><%= player.date_joined.strftime("%b %Y") %></span>
-                  </div>
-                <% end %>
-                <% if player.contract_ends.present? %>
-                  <div>
-                    <% if player.contract_ends < Date.today %>
-                      <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold
-                                   bg-red-500/20 border border-red-500 text-red-400 mb-1">
-                        CONTRACT ENDED
-                      </span>
-                      <span class="block text-gray-600 text-xs">Ended <%= player.contract_ends.strftime("%b %Y") %></span>
-                    <% else %>
-                      <span class="block text-gray-600">Contract Until</span>
-                      <span class="font-medium"><%= player.contract_ends.strftime("%b %Y") %></span>
+                    <!-- Dates -->
+                    <% if player.date_joined.present? || player.contract_ends.present? %>
+                      <div class="flex flex-col sm:flex-row gap-2 sm:gap-4 text-xs text-gray-500 mt-2 sm:mt-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-700/30">
+                        <% if player.date_joined.present? %>
+                          <div>
+                            <span class="block text-gray-600">Joined</span>
+                            <span class="font-medium"><%= player.date_joined.strftime("%b %Y") %></span>
+                          </div>
+                        <% end %>
+                        <% if player.contract_ends.present? %>
+                          <div>
+                            <span class="block text-gray-600">Contract Until</span>
+                            <span class="font-medium"><%= player.contract_ends.strftime("%b %Y") %></span>
+                          </div>
+                        <% end %>
+                      </div>
                     <% end %>
                   </div>
-                <% end %>
-              </div>
+                </div>
+              <% end %>
+            </div>
+          <% else %>
+            <div class="text-center py-8">
+              <p class="text-gray-500">No active players</p>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Former Players Panel -->
+        <% if former_players.any? %>
+          <div data-tabs-target="panel" data-tab-id="former" class="hidden">
+            <div class="space-y-3">
+              <% former_players.each do |player| %>
+                <% colors = role_colors[normalize_role.call(player.role)] || default_colors %>
+                <div class="<%= colors[:bg] %> border-l-4 <%= colors[:border] %> rounded-lg p-3 sm:p-4 opacity-75 hover:opacity-100 hover:bg-gray-800/40 transition-all duration-200">
+                  <div class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+                    <!-- Player IGN -->
+                    <div class="w-full sm:w-auto sm:flex-1 sm:min-w-0">
+                      <div class="flex items-center gap-2">
+                        <span class="text-lg"><%= colors[:icon] %></span>
+                        <h3 class="text-base sm:text-lg font-bold text-gray-100 truncate"><%= player.ign %></h3>
+                      </div>
+                      <% if player.name.present? %>
+                        <p class="text-sm text-gray-400 ml-7"><%= player.name %></p>
+                      <% end %>
+                    </div>
+
+                    <!-- Role Badge -->
+                    <span class="self-start sm:self-auto inline-flex items-center px-3 py-1 rounded-full <%= colors[:badge_bg] %>
+                                 border <%= colors[:badge_border] %> <%= colors[:badge_text] %> font-semibold text-sm">
+                      <%= player.role || 'N/A' %>
+                    </span>
+
+                    <!-- Contract Status -->
+                    <div class="flex flex-col sm:flex-row gap-2 sm:gap-4 text-xs text-gray-500 mt-2 sm:mt-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-700/30">
+                      <% if player.date_joined.present? %>
+                        <div>
+                          <span class="block text-gray-600">Joined</span>
+                          <span class="font-medium"><%= player.date_joined.strftime("%b %Y") %></span>
+                        </div>
+                      <% end %>
+                      <div>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold
+                                     bg-red-500/20 border border-red-500 text-red-400 mb-1">
+                          CONTRACT ENDED
+                        </span>
+                        <span class="block text-gray-600 text-xs">Ended <%= player.contract_ends.strftime("%b %Y") %></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
             </div>
           </div>
         <% end %>

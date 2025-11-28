@@ -102,6 +102,7 @@
             <% region_colors = region_color_config(region) %>
             <button type="button"
                     data-action="click->search#filterByRegion"
+                    data-search-target="regionButton"
                     data-region="<%= region %>"
                     class="snap-center shrink-0 w-44 min-h-[100px] p-5 rounded-xl
                            bg-gray-800/30 backdrop-blur-sm border <%= region_colors[:border] %>
@@ -123,22 +124,31 @@
       </div>
     </section>
 
-    <!-- Results Counter -->
+    <!-- Results Counter & Active Filter -->
     <div class="px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-4">
       <div class="max-w-7xl mx-auto">
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between gap-4">
           <span data-search-target="resultCount" class="text-sm text-gray-400">
             Showing all <%= @all_teams.count %> teams
           </span>
-          <!-- Active Region Filter (hidden by default) -->
-          <span data-search-target="activeFilter" class="hidden text-sm text-lol-gold flex items-center gap-2">
-            <span data-search-target="activeFilterText"></span>
-            <button type="button" data-action="click->search#clearRegionFilter" class="hover:text-white transition-colors">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <!-- Active Region Filter Banner (hidden by default) -->
+          <div data-search-target="activeFilter" class="hidden">
+            <button type="button"
+                    data-action="click->search#clearRegionFilter"
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full
+                           bg-lol-gold/20 border border-lol-gold/50
+                           text-lol-gold font-semibold text-sm
+                           hover:bg-lol-gold/30 hover:border-lol-gold
+                           transition-all duration-200 group">
+              <svg class="w-4 h-4 text-lol-gold/70" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd"/>
+              </svg>
+              <span data-search-target="activeFilterText"></span>
+              <svg class="w-4 h-4 text-lol-gold/50 group-hover:text-lol-gold transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
               </svg>
             </button>
-          </span>
+          </div>
         </div>
       </div>
     </div>

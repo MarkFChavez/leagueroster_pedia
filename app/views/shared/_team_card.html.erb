@@ -1,11 +1,11 @@
 <%
   player_count = team.players.count
   mode = local_assigns.fetch(:mode, 'compact')
-  # Prepare roster data for modal
-  roster_json = team.players.map { |p| { ign: p.ign, name: p.name, role: p.role, contract_ends: p.contract_ends, date_joined: p.date_joined } }.to_json
   # Get team logo configuration (region-based)
   logo_config = team_logo_config(team)
   region_colors = region_color_config(team.region)
+  # Player names for search
+  player_names = team.players.map { |p| [p.ign, p.name].compact }.flatten.to_json
 
   # Mode-specific styling
   card_classes = case mode
@@ -24,14 +24,17 @@
   title_size = mode == 'editorial' ? 'text-xl' : (mode == 'compact' ? 'text-base' : 'text-lg')
 %>
 
-<div class="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 <%= card_classes %>
+<%= link_to team_path(team),
+    class: "bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 #{card_classes}
             hover:border-lol-gold/50 hover:shadow-glow-sm transition-all duration-300
-            group flex-shrink-0 flex flex-col cursor-pointer js-open-modal"
-     data-team-id="<%= team.id %>"
-     data-team-name="<%= team.team_source.short_name %>"
-     data-team-long-name="<%= team.team_source.long_name %>"
-     data-team-region="<%= team.region %>"
-     data-team-roster="<%= roster_json %>">
+            group flex-shrink-0 flex flex-col",
+    data: {
+      team_id: team.id,
+      team_name: team.team_source.short_name,
+      team_long_name: team.team_source.long_name,
+      team_region: team.region,
+      team_players: player_names
+    } do %>
 
   <!-- Team Logo Circle -->
   <div class="<%= logo_size %> mx-auto mb-4 bg-gradient-to-br <%= logo_config[:gradient_from] %> <%= logo_config[:gradient_to] %>
@@ -83,4 +86,4 @@
       </div>
     </div>
   <% end %>
-</div>
+<% end %>

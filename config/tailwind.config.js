@@ -88,6 +88,14 @@ module.exports = {
       },
       animation: {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'fade-in-up': 'fadeInUp 0.3s ease-out forwards',
+      },
+      backgroundSize: {
+        'size-200': '200% 100%',
+      },
+      backgroundPosition: {
+        'pos-0': '0% 0%',
+        'pos-100': '100% 0%',
       },
       keyframes: {
         fadeIn: {
