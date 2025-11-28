@@ -14,7 +14,7 @@
 
       <!-- Subtitle -->
       <p class="text-gray-300 text-base sm:text-lg md:text-2xl font-medium mb-4 md:mb-8 animate-[fadeInUp_0.8s_ease-out_0.1s_both]">
-        Your complete guide to professional League of Legends teams & players
+        Discover professional League of Legends teams and players from LCK, LPL, LEC & more
       </p>
 
       <!-- Stats Line -->
@@ -25,7 +25,7 @@
       </p>
 
       <!-- Search Bar -->
-      <div class="max-w-xl mx-auto animate-[fadeInUp_0.8s_ease-out_0.3s_both] relative">
+      <div class="max-w-xl mx-auto animate-[fadeInUp_0.8s_ease-out_0.3s_both] relative z-50">
         <div class="relative">
           <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -55,7 +55,7 @@
         <div data-search-target="preview"
              class="hidden absolute top-full left-0 right-0 mt-2 max-h-80 overflow-y-auto
                     bg-gray-800/95 backdrop-blur-md border border-gray-600/50 rounded-xl
-                    shadow-2xl z-50">
+                    shadow-2xl z-[100]">
           <div data-search-target="previewResults" class="p-2">
             <!-- Results will be dynamically inserted here -->
           </div>
@@ -83,7 +83,7 @@
 
   <% if @all_teams.any? %>
     <!-- Featured Regions Section -->
-    <section class="px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-6 md:py-12 animate-[fadeInUp_0.8s_ease-out_0.4s_both]">
+    <section class="relative z-0 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-6 md:py-12 animate-[fadeInUp_0.8s_ease-out_0.4s_both]">
       <div class="max-w-7xl mx-auto">
         <!-- Section Header -->
         <div class="text-center mb-4 md:mb-8">
