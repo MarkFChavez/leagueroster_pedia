@@ -84,6 +84,16 @@ module Admin
       end
     end
 
+    def sync_all
+      team_sources = TeamSource.all
+      team_sources.each do |team_source|
+        TeamSyncJob.perform_later(team_source.id)
+      end
+
+      redirect_to admin_team_sources_path,
+                  notice: "Syncing #{team_sources.count} team sources in the background. Check the Jobs dashboard for progress."
+    end
+
     private
 
     def set_base_breadcrumbs

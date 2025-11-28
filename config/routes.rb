@@ -19,6 +19,9 @@ Rails.application.routes.draw do
   namespace :admin do
     root "dashboard#index"
     resources :team_sources do
+      collection do
+        post :sync_all
+      end
       member do
         post :sync
       end

@@ -10,7 +10,10 @@
           Manage external team data sources
         </p>
       </div>
-      <%= link_to "New Team Source", new_admin_team_source_path, class: "bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors" %>
+      <div class="flex gap-3">
+        <%= button_to "Sync All", sync_all_admin_team_sources_path, method: :post, data: { turbo_confirm: "This will sync all team sources in the background. Continue?" }, class: "bg-purple-500 hover:bg-purple-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors cursor-pointer" %>
+        <%= link_to "New Team Source", new_admin_team_source_path, class: "bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors" %>
+      </div>
     </div>
   </div>
 
